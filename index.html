@@ -472,8 +472,11 @@ const MONTHS_SHORT=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.'
 function processCalendar(){
   const today=new Date();today.setHours(0,0,0,0);
   const all=[...calData,...localEvents];
-  const upcoming=all.filter(r=>{const d=new Date(r['Start Date']||r.start||'');return !isNaN(d)&&d>=today;})
-    .sort((a,b)=>new Date(a['Start Date']||a.start)-new Date(b['Start Date']||b.start)).slice(0,5);
+  const upcoming=all.filter(r=>{
+    const ds=parseDate(r['Start Date']||r.start||'');
+    if(!ds)return false;
+    const d=new Date(ds);return !isNaN(d)&&d>=today;
+  }).sort((a,b)=>new Date(parseDate(a['Start Date']||a.start))-new Date(parseDate(b['Start Date']||b.start))).slice(0,5);
   document.getElementById('ov-upcoming').textContent=upcoming.length;
   document.getElementById('ov-upcoming-list').innerHTML=upcoming.length===0
     ?'<div style="font-size:12px;color:var(--text3)">ไม่มีกิจกรรม</div>'
@@ -503,10 +506,25 @@ function getEvCls(cat){
   if(c.includes('sch'))return'sch';if(c.includes('vis'))return'vis';return'conf';
 }
 
+function parseDate(str){
+  if(!str)return null;
+  str=str.trim();
+  // YYYY-MM-DD
+  if(/^\d{4}-\d{2}-\d{2}/.test(str))return str.slice(0,10);
+  // D Month YYYY or DD Month YYYY
+  const months={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
+  const m=str.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
+  if(m){
+    const mon=months[m[2].slice(0,3)];
+    if(mon)return `${m[3]}-${mon}-${m[1].padStart(2,'0')}`;
+  }
+  return null;
+}
+
 function getEventsOnDate(ds){
   return[...calData,...localEvents].filter(r=>{
-    const s=(r['Start Date']||r.start||'').slice(0,10);
-    const e=(r['End Date']||r.end||s).slice(0,10);
+    const s=parseDate(r['Start Date']||r.start||'');
+    const e=parseDate(r['End Date']||r.end||'')||s;
     return s&&ds>=s&&ds<=e;
   });
 }
