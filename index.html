@@ -357,9 +357,13 @@ function nav(id,el){
 }
 
 // ===== CSV =====
-const CSV_MOU='https://docs.google.com/spreadsheets/d/e/2PACX-1vQc5N_5tnBnYsXEyY6NRxNZYJJINVfoZp-VzCECkaQl9CPy-gRMoQYO6McIly6-l-OQCVKNCj_vXs0w/pub?gid=51578232&single=true&output=csv';
-const CSV_CAL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQR4S2Jxta5T3opzmq5EHWysW6j9-lea2Fxd94AUaKdoNxIvuuQa7MNaMeUVydvR6Ep5pQavWBKFRjg/pub?gid=0&single=true&output=csv';
-const CSV_PPL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRVWxk12K9-pbBURP7RKwmvxH0j4bY0LEbml4FMv3J0_H5Q5DfVelKg5n1wd_EdGx_Bp4mZwgWrdflk/pub?output=csv';
+const _MOU='https://docs.google.com/spreadsheets/d/e/2PACX-1vQc5N_5tnBnYsXEyY6NRxNZYJJINVfoZp-VzCECkaQl9CPy-gRMoQYO6McIly6-l-OQCVKNCj_vXs0w/pub?gid=51578232&single=true&output=csv';
+const _CAL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQR4S2Jxta5T3opzmq5EHWysW6j9-lea2Fxd94AUaKdoNxIvuuQa7MNaMeUVydvR6Ep5pQavWBKFRjg/pub?gid=0&single=true&output=csv';
+const _PPL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRVWxk12K9-pbBURP7RKwmvxH0j4bY0LEbml4FMv3J0_H5Q5DfVelKg5n1wd_EdGx_Bp4mZwgWrdflk/pub?output=csv';
+const PROXY='https://api.allorigins.win/raw?url=';
+const CSV_MOU=PROXY+encodeURIComponent(_MOU);
+const CSV_CAL=PROXY+encodeURIComponent(_CAL);
+const CSV_PPL=PROXY+encodeURIComponent(_PPL);
 let mouData=[],calData=[],pplData=[],localEvents=[];
 function fetchCSV(url,cb){Papa.parse(url,{download:true,header:true,skipEmptyLines:true,complete:r=>cb(r.data),error:()=>cb([])});}
 
