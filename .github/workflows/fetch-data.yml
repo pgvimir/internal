@@ -1,1 +1,41 @@
+name: Fetch Google Sheets Data
 
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Fetch CSV data
+        run: |
+          mkdir -p data
+          curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vQc5N_5tnBnYsXEyY6NRxNZYJJINVfoZp-VzCECkaQl9CPy-gRMoQYO6McIly6-l-OQCVKNCj_vXs0w/pub?gid=51578232&single=true&output=csv" -o data/mou.csv
+          curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR4S2Jxta5T3opzmq5EHWysW6j9-lea2Fxd94AUaKdoNxIvuuQa7MNaMeUVydvR6Ep5pQavWBKFRjg/pub?gid=0&single=true&output=csv" -o data/calendar.csv
+          curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vRVWxk12K9-pbBURP7RKwmvxH0j4bY0LEbml4FMv3J0_H5Q5DfVelKg5n1wd_EdGx_Bp4mZwgWrdflk/pub?output=csv" -o data/people.csv
+          python3 << 'PYEOF'
+          import csv, json
+          def to_json(src, dst):
+              with open(src, encoding='utf-8') as f:
+                  rows = list(csv.DictReader(f))
+              with open(dst, 'w', encoding='utf-8') as f:
+                  json.dump(rows, f, ensure_ascii=False)
+          to_json('data/mou.csv', 'data/mou.json')
+          to_json('data/calendar.csv', 'data/calendar.json')
+          to_json('data/people.csv', 'data/people.json')
+          print('Done')
+          PYEOF
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "Update data $(date '+%Y-%m-%d %H:%M')"
+          git push
