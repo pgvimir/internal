@@ -365,13 +365,25 @@ const CSV_MOU=PROXY+encodeURIComponent(_MOU);
 const CSV_CAL=PROXY+encodeURIComponent(_CAL);
 const CSV_PPL=PROXY+encodeURIComponent(_PPL);
 let mouData=[],calData=[],pplData=[],localEvents=[];
-function fetchCSV(url,cb){Papa.parse(url,{download:true,header:true,skipEmptyLines:true,complete:r=>cb(r.data),error:()=>cb([])});}
+function fetchCSV(url,cb){
+  fetch(url)
+    .then(r=>{
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      return r.text();
+    })
+    .then(text=>{
+      const result=Papa.parse(text,{header:true,skipEmptyLines:true});
+      cb(result.data);
+    })
+    .catch(err=>{
+      console.error('fetchCSV error:',err,url);
+      cb([]);
+    });
+}
 
 // ===== INIT =====
 function initApp(){
   updateClock();
-  google.charts.load('current',{packages:['geochart']});
-  google.charts.setOnLoadCallback(()=>{chartsReady=true;if(pplData.length>0)drawMap();});
   fetchCSV(CSV_MOU,d=>{mouData=d;processMOU();});
   fetchCSV(CSV_CAL,d=>{calData=d;processCalendar();});
   fetchCSV(CSV_PPL,d=>{pplData=d;processPeople();});
@@ -379,7 +391,6 @@ function initApp(){
 }
 
 // ===== HELPERS =====
-let chartsReady=false;
 const PILLARS=['Student Exchange','Lecturer Exchange','Workshop & Training','Conference','Research & Publication','Curriculum'];
 const PILLAR_KEYS=['การแลกเปลี่ยนนักศึกษา','การแลกเปลี่ยนอาจารย์','อบรมเชิงปฏิบัติการ','เข้าร่วมประชุม','วิจัย','หลักสูตร'];
 const PILLAR_COLORS=['#d4a843','#d4a843','#5b8bd4','#888','#e05c5c','#4caf7d'];
@@ -399,19 +410,6 @@ function getHealth(total,inb,outb){
   if(total>=5&&inb>0&&outb>0)return'good';
   if(total>=2||(inb>0||outb>0))return'watch';
   return'contact';
-}
-
-// ===== MAP =====
-function drawMap(){
-  const countryCount={};
-  pplData.forEach(r=>{const c=r['ประเทศ']||'';if(c&&c!=='Thailand'&&c!=='ไทย')countryCount[c]=(countryCount[c]||0)+1;});
-  const data=new google.visualization.DataTable();
-  data.addColumn('string','Country');
-  data.addColumn('number','Participants');
-  Object.entries(countryCount).forEach(([k,v])=>data.addRow([k,v]));
-  const opts={colorAxis:{colors:['#1e3a5f','#5b8bd4']},backgroundColor:'#0f0f0f',datalessRegionColor:'#1e1e1e',defaultColor:'#2a2a2a',legend:'none',tooltip:{isHtml:true}};
-  const chart=new google.visualization.GeoChart(document.getElementById('map-container'));
-  chart.draw(data,opts);
 }
 
 // ===== MOU =====
