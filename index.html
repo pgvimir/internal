@@ -6,7 +6,6 @@
 <title>PGVIM IR — Internal System</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <style>
 :root{--bg:#0f0f0f;--bg2:#161616;--bg3:#1e1e1e;--border:#2a2a2a;--border2:#333;--text:#e8e8e8;--text2:#888;--text3:#444;--accent:#c8a96e;--green:#4caf7d;--red:#e05c5c;--yellow:#d4a843;--blue:#5b8bd4;--purple:#9b6fd4;--font:'IBM Plex Sans Thai',sans-serif;--mono:'IBM Plex Mono',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -152,7 +151,7 @@ tr:hover td{background:var(--bg2)}
 /* FILTERS */
 .filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .f-select,.f-input{background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:7px 12px;font-family:var(--font);font-size:13px;outline:none}
-.f-input{flex:1;min-width:200px}
+.f-input{flex:1;min-width:160px}
 
 /* INSTITUTE TABS */
 .inst-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
@@ -160,8 +159,6 @@ tr:hover td{background:var(--bg2)}
 .inst-tab:hover{border-color:var(--text2);color:var(--text)}
 .inst-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(200,169,110,.08)}
 
-/* MAP */
-#map-container{background:var(--bg2);border:1px solid var(--border);padding:8px;margin-bottom:20px;min-height:320px}
 </style>
 </head>
 <body>
@@ -188,16 +185,14 @@ tr:hover td{background:var(--bg2)}
       <div class="sidebar-tag">PGVIMIR</div>
       <div class="sidebar-name">IR <span>Internal</span></div>
     </div>
-    <div class="nav-section">ภาพรวม</div>
     <div class="nav-item active" onclick="nav('overview',this)"><span class="nav-dot"></span>ภาพรวม</div>
-    <div class="nav-item" onclick="nav('dashboard',this)"><span class="nav-dot"></span>Dashboard</div>
-    <div class="nav-section">วิเคราะห์</div>
-    <div class="nav-item" onclick="nav('impact',this)"><span class="nav-dot"></span>IR Impact</div>
-    <div class="nav-item" onclick="nav('institute',this)"><span class="nav-dot"></span>Each Institute</div>
-    <div class="nav-section">จัดการ</div>
+    <div class="nav-divider"></div>
+    <a class="nav-item" href="https://script.google.com/macros/s/AKfycbwV11Z0-M4p49yT-Ne5ApwalTEOk93b9buf0HopRZ4gKNwDVbcq6VqVq_h3RZ0E_r5b/exec" target="_blank" rel="noopener noreferrer" style="text-decoration:none"><span class="nav-dot" style="background:var(--accent)"></span>Mobility Dashboard ↗</a>
+    <a class="nav-item" href="https://script.google.com/macros/s/AKfycbxCdUeEna-z9hFJggb_DiK27wXAdrZ8TEoo3BgUj33TRW80gkMSypjUxXLEIJ81hSlU/exec" target="_blank" rel="noopener noreferrer" style="text-decoration:none"><span class="nav-dot" style="background:var(--accent)"></span>IR Impact ↗</a>
+    <div class="nav-divider"></div>
     <div class="nav-item" onclick="nav('mou',this)"><span class="nav-dot"></span>MOU</div>
     <div class="nav-item" onclick="nav('calendar',this)"><span class="nav-dot"></span>Calendar</div>
-    <div class="nav-item" onclick="nav('people',this)"><span class="nav-dot"></span>ผู้เข้าร่วม</div>
+    <div class="nav-item" onclick="nav('institute',this)"><span class="nav-dot"></span>Each Institute</div>
     <div class="sidebar-footer">
       <div class="logout-btn" onclick="logout()">LOGOUT</div>
     </div>
@@ -212,6 +207,17 @@ tr:hover td{background:var(--bg2)}
 
       <!-- OVERVIEW -->
       <div class="panel active" id="panel-overview">
+        <div style="display:flex;gap:10px;margin-bottom:20px;align-items:center;flex-wrap:wrap">
+          <select class="f-select" id="ov-fy-filter" onchange="renderOverview()" style="min-width:160px">
+            <option value="">ทุกปีงบประมาณ</option>
+          </select>
+          <select class="f-select" id="ov-intl-filter" onchange="renderOverview()">
+            <option value="">International + Domestic</option>
+            <option value="International">International</option>
+            <option value="Domestic">Domestic</option>
+          </select>
+          <span style="font-size:11px;color:var(--text3);font-family:var(--mono)" id="ov-filter-label"></span>
+        </div>
         <div class="metrics">
           <div class="metric"><div class="metric-val b" id="ov-mou">—</div><div class="metric-lbl">MOU Active</div></div>
           <div class="metric"><div class="metric-val r" id="ov-expiring">—</div><div class="metric-lbl">ใกล้หมดอายุ</div></div>
@@ -226,87 +232,8 @@ tr:hover td{background:var(--bg2)}
         </div>
       </div>
 
-      <!-- DASHBOARD -->
-      <div class="panel" id="panel-dashboard">
-        <div class="metrics">
-          <div class="metric"><div class="metric-val g" id="db-inbound">—</div><div class="metric-lbl">Total Inbound</div></div>
-          <div class="metric"><div class="metric-val y" id="db-outbound">—</div><div class="metric-lbl">Total Outbound</div></div>
-          <div class="metric"><div class="metric-val b" id="db-mou">—</div><div class="metric-lbl">MOU Partners</div></div>
-          <div class="metric"><div class="metric-val" id="db-countries">—</div><div class="metric-lbl">ประเทศ</div></div>
-        </div>
-        <div class="sec-title">แผนที่ความร่วมมือ</div>
-        <div id="map-container"><div class="loading" style="padding:40px 20px;text-align:center">กำลังโหลดแผนที่...</div></div>
-        <div class="grid2">
-          <div class="card">
-            <div class="card-title">Top Countries</div>
-            <div id="db-top-countries"><div class="loading">กำลังโหลด...</div></div>
-          </div>
-          <div class="card">
-            <div class="card-title">ประเภทกิจกรรม</div>
-            <div id="db-activity-types"><div class="loading">กำลังโหลด...</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- IR IMPACT -->
-      <div class="panel" id="panel-impact">
-        <div id="impact-main">
-          <div class="filters">
-            <select class="f-select" id="imp-filter" onchange="renderImpact()">
-              <option value="all">ทั้งหมด</option>
-              <option value="International">International</option>
-              <option value="National">National</option>
-            </select>
-          </div>
-          <div class="sec-title">Pillar Breakdown</div>
-          <div class="metrics" id="imp-pillars"></div>
-          <div class="sec-title">Partner Health</div>
-          <div class="health-grid">
-            <div class="health-card">
-              <div class="health-card-title"><div class="health-dot" style="background:var(--green)"></div>ไปต่อ <span id="h-good-count" style="color:var(--text3);font-family:var(--mono);font-size:10px"></span></div>
-              <div id="h-good"></div>
-            </div>
-            <div class="health-card">
-              <div class="health-card-title"><div class="health-dot" style="background:var(--yellow)"></div>เฝ้าระวัง <span id="h-watch-count" style="color:var(--text3);font-family:var(--mono);font-size:10px"></span></div>
-              <div id="h-watch"></div>
-            </div>
-            <div class="health-card">
-              <div class="health-card-title"><div class="health-dot" style="background:var(--red)"></div>ควรติดต่อ <span id="h-contact-count" style="color:var(--text3);font-family:var(--mono);font-size:10px"></span></div>
-              <div id="h-contact"></div>
-            </div>
-          </div>
-          <div class="sec-title">รายชื่อ Partner ทั้งหมด</div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Partner</th><th>ประเทศ</th><th>Activities</th><th>Inbound</th><th>Outbound</th><th>Health</th><th></th></tr></thead>
-              <tbody id="imp-table"></tbody>
-            </table>
-          </div>
-        </div>
-        <div id="impact-detail" class="partner-detail">
-          <div class="back-btn" onclick="closeDetail()">← กลับ</div>
-          <div class="partner-detail-header">
-            <div>
-              <div class="partner-detail-name" id="det-name"></div>
-              <div style="font-size:12px;color:var(--text2);margin-top:4px" id="det-country"></div>
-            </div>
-            <div style="margin-left:auto;text-align:right">
-              <div style="font-size:11px;color:var(--text3);font-family:var(--mono)">TOTAL ACTIVITIES</div>
-              <div class="score-big" id="det-score"></div>
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <div class="sec-title">Pillar Weight</div>
-              <div id="det-pillars"></div>
-            </div>
-            <div>
-              <div class="sec-title">Activity Ledger</div>
-              <div id="det-activities"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- DASHBOARD removed - using link -->
+      <div class="panel" id="panel-dashboard"></div>
 
       <!-- EACH INSTITUTE -->
       <div class="panel" id="panel-institute">
@@ -342,55 +269,40 @@ tr:hover td{background:var(--bg2)}
 
       <!-- CALENDAR -->
       <div class="panel" id="panel-calendar">
-        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
-          <button class="add-btn" onclick="openForm()" style="margin-bottom:0">+ เพิ่มกิจกรรม</button>
-          <select class="f-select" id="cal-view-filter" onchange="renderCalendar()">
-            <option value="all">ทุกประเภท</option>
-            <option value="Conference">Conference</option>
-            <option value="MOU">MOU</option>
-            <option value="Performing">Performing</option>
-            <option value="Scholarship">Scholarship</option>
-            <option value="Visiting">Visiting</option>
-          </select>
-        </div>
-        <div class="cal-header">
-          <button class="cal-nav" onclick="changeMonth(-1)">&#8592;</button>
-          <div class="cal-month-label" id="cal-month-label"></div>
-          <button class="cal-nav" onclick="changeMonth(1)">&#8594;</button>
-        </div>
-        <div class="cal-grid" id="cal-grid">
-          <div class="cal-day-name">อา</div><div class="cal-day-name">จ</div><div class="cal-day-name">อ</div>
-          <div class="cal-day-name">พ</div><div class="cal-day-name">พฤ</div><div class="cal-day-name">ศ</div><div class="cal-day-name">ส</div>
-        </div>
-        <div style="margin-top:14px;display:flex;gap:14px;flex-wrap:wrap">
-          <span style="font-size:11px;color:var(--text3)">&#9632; <span style="color:#8ab0e8">Conference</span></span>
-          <span style="font-size:11px;color:var(--text3)">&#9632; <span style="color:var(--accent)">MOU</span></span>
-          <span style="font-size:11px;color:var(--text3)">&#9632; <span style="color:var(--green)">Performing</span></span>
-          <span style="font-size:11px;color:var(--text3)">&#9632; <span style="color:var(--yellow)">Scholarship</span></span>
-          <span style="font-size:11px;color:var(--text3)">&#9632; <span style="color:var(--purple)">Visiting</span></span>
-        </div>
-        <div class="card" style="margin-top:20px">
-          <div class="card-title">รายการกิจกรรมทั้งหมด</div>
-          <div class="table-wrap" style="margin-bottom:0">
-            <table><thead><tr><th>ชื่อกิจกรรม</th><th>สถาบัน</th><th>ประเภท</th><th>วันที่</th><th>ผู้รับผิดชอบ</th></tr></thead>
-            <tbody id="cal-list"></tbody></table>
+        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+          <div class="filters" style="margin-bottom:0">
+            <select class="f-select" id="cal-filter-cat" onchange="renderCalList()">
+              <option value="">ทุกประเภท</option>
+              <option value="Conference">Conference</option>
+              <option value="MOU">MOU</option>
+              <option value="Performing">Performing</option>
+              <option value="Scholarship">Scholarship</option>
+              <option value="Visiting">Visiting</option>
+            </select>
+            <input class="f-input" id="cal-search" placeholder="ค้นหากิจกรรม..." oninput="renderCalList()" style="max-width:220px">
           </div>
+          <button class="add-btn" onclick="openForm()" style="margin-bottom:0">+ เพิ่มกิจกรรม</button>
         </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ชื่อกิจกรรม</th>
+                <th>สถาบัน / ประเทศ</th>
+                <th>ประเภท</th>
+                <th>วันเริ่ม</th>
+                <th>วันสิ้นสุด</th>
+                <th>ผู้รับผิดชอบ</th>
+                <th>หน่วยงาน</th>
+              </tr>
+            </thead>
+            <tbody id="cal-list"></tbody>
+          </table>
+        </div>
+        <div id="cal-loading" class="loading">กำลังโหลด...</div>
       </div>
 
-      <!-- PEOPLE -->
-      <div class="panel" id="panel-people">
-        <div class="filters">
-          <select class="f-select" id="p-dir" onchange="renderPeople()"><option value="">ทั้งหมด</option><option value="ขาเข้า">Inbound</option><option value="ขาออก">Outbound</option></select>
-          <select class="f-select" id="p-cat" onchange="renderPeople()"><option value="">ทุก Category</option><option value="Student">Student</option><option value="Lecturer">Lecturer</option><option value="Artist">Artist</option><option value="Staff">Staff</option></select>
-          <input class="f-input" id="p-search" oninput="renderPeople()" placeholder="ค้นหาชื่อ / สถาบัน...">
-        </div>
-        <div id="p-loading" class="loading">กำลังโหลด...</div>
-        <div class="table-wrap" id="p-wrap" style="display:none">
-          <table><thead><tr><th>ชื่อ</th><th>ประเภท</th><th>Direction</th><th>สถาบัน</th><th>ประเทศ</th><th>กิจกรรม</th><th>วันที่</th></tr></thead>
-          <tbody id="p-tbody"></tbody></table>
-        </div>
-      </div>
+
 
     </div>
   </div>
@@ -435,7 +347,7 @@ function updateClock(){document.getElementById('clock').textContent=new Date().t
 setInterval(updateClock,1000);updateClock();
 
 // ===== NAV =====
-const navTitles={overview:'ภาพรวม',dashboard:'Dashboard',impact:'IR Impact',institute:'Each Institute',mou:'MOU',calendar:'Calendar',people:'ผู้เข้าร่วม'};
+const navTitles={overview:'ภาพรวม',institute:'Each Institute',mou:'MOU',calendar:'Calendar'};
 function nav(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -458,7 +370,7 @@ function initApp(){
   google.charts.setOnLoadCallback(()=>{chartsReady=true;if(pplData.length>0)drawMap();});
   fetchCSV(CSV_MOU,d=>{mouData=d;processMOU();});
   fetchCSV(CSV_CAL,d=>{calData=d;processCalendar();});
-  fetchCSV(CSV_PPL,d=>{pplData=d;processPeople();renderPeople();});
+  fetchCSV(CSV_PPL,d=>{pplData=d;processPeople();});
   renderCalendar();
 }
 
@@ -550,207 +462,35 @@ function processMOU(){
   document.getElementById('mou-pending').innerHTML=pending.map(r=>`<tr><td>${r.name}</td><td><span class="badge x">${r.type||'—'}</span></td><td><span class="badge b">${r.subStatus||r.status||'—'}</span></td></tr>`).join('')||'<tr><td colspan="3" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
 }
 
-// ===== PEOPLE =====
-function processPeople(){
-  document.getElementById('p-loading').style.display='none';
-  document.getElementById('p-wrap').style.display='block';
-  // dashboard metrics
-  const inb=pplData.filter(r=>r['ขาเข้า / ขาออก']?.includes('เข้า')).length;
-  const outb=pplData.filter(r=>r['ขาเข้า / ขาออก']?.includes('ออก')).length;
-  const countries=new Set(pplData.map(r=>r['ประเทศ']).filter(Boolean)).size;
-  document.getElementById('db-inbound').textContent=inb;
-  document.getElementById('db-outbound').textContent=outb;
-  document.getElementById('db-countries').textContent=countries;
-  document.getElementById('ov-inbound').textContent=inb;
-  document.getElementById('ov-outbound').textContent=outb;
-  // top countries
-  const cc={};
-  pplData.forEach(r=>{const c=r['ประเทศ']||'';if(c)cc[c]=(cc[c]||0)+1;});
-  const topC=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  document.getElementById('db-top-countries').innerHTML=topC.map(([c,n])=>
-    `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px">${c}</span><span class="badge b">${n}</span></div>`
-  ).join('');
-  // activity types
-  const ac={};
-  pplData.forEach(r=>{const a=r['ลักษณะกิจกรรมที่เข้าร่วม']||'Other';ac[a]=(ac[a]||0)+1;});
-  const topA=Object.entries(ac).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  const maxA=topA[0]?.[1]||1;
-  document.getElementById('db-activity-types').innerHTML=topA.map(([a,n])=>
-    `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:4px"><span>${a}</span><span style="font-family:var(--mono)">${n}</span></div><div style="background:var(--bg3);height:4px"><div style="background:var(--accent);height:4px;width:${Math.round(n/maxA*100)}%"></div></div></div>`
-  ).join('');
-  if(chartsReady)drawMap();
-  renderImpact();
-  renderInstitute();
-}
-
-// ===== IMPACT =====
-function renderImpact(){
-  const filter=document.getElementById('imp-filter').value;
-  const rows=pplData.filter(r=>{
-    if(!r['ชื่อ'])return false;
-    if(filter==='International')return r['International/Domestic']==='International';
-    if(filter==='National')return r['International/Domestic']==='Domestic'||r['International/Domestic']==='National';
-    return true;
+// ===== OVERVIEW FILTER =====
+function populateFYFilter(){
+  const years = [...new Set(pplData.map(r=>r['ปีงบประมาณ']||r['Fiscal Year']||'').filter(Boolean))].sort().reverse();
+  const sel = document.getElementById('ov-fy-filter');
+  years.forEach(y=>{
+    const opt=document.createElement('option');
+    opt.value=y; opt.textContent=`ปีงบ ${y}`;
+    sel.appendChild(opt);
   });
-  // pillar totals
-  const pillarIn=[0,0,0,0,0,0],pillarOut=[0,0,0,0,0,0];
-  rows.forEach(r=>{
-    const idx=getPillarIdx(r['ลักษณะกิจกรรมที่เข้าร่วม']);
-    if(r['ขาเข้า / ขาออก']?.includes('เข้า'))pillarIn[idx]++;else pillarOut[idx]++;
-  });
-  document.getElementById('imp-pillars').innerHTML=PILLARS.map((p,i)=>
-    `<div class="metric"><div style="font-size:10px;color:var(--text3);letter-spacing:.06em;margin-bottom:6px;text-transform:uppercase">${p}</div>
-    <div style="display:flex;gap:12px"><div><div style="font-size:18px;font-weight:600;color:var(--blue);font-family:var(--mono)">${pillarIn[i]}</div><div style="font-size:10px;color:var(--text3)">IN</div></div>
-    <div><div style="font-size:18px;font-weight:600;color:var(--yellow);font-family:var(--mono)">${pillarOut[i]}</div><div style="font-size:10px;color:var(--text3)">OUT</div></div></div></div>`
-  ).join('');
-  // partner stats
-  const partners={};
-  rows.forEach(r=>{
-    const inst=r['หน่วยงาน']||'Unknown';const country=r['ประเทศ']||'';
-    const isIntl=r['International/Domestic']==='International';
-    if(!partners[inst])partners[inst]={name:inst,country,isIntl,total:0,inb:0,outb:0,activities:[],pillars:[0,0,0,0,0,0]};
-    partners[inst].total++;
-    const dir=r['ขาเข้า / ขาออก']||'';
-    if(dir.includes('เข้า'))partners[inst].inb++;else partners[inst].outb++;
-    const act=r['ชื่องานที่เข้าร่วม']||r['ลักษณะกิจกรรมที่เข้าร่วม']||'';
-    partners[inst].activities.push({act,dir,type:r['ลักษณะกิจกรรมที่เข้าร่วม']||''});
-    partners[inst].pillars[getPillarIdx(r['ลักษณะกิจกรรมที่เข้าร่วม'])]++;
-  });
-  const pList=Object.values(partners).sort((a,b)=>b.total-a.total);
-  const good=[],watch=[],contact=[];
-  pList.forEach(p=>{const h=getHealth(p.total,p.inb,p.outb);if(h==='good')good.push(p);else if(h==='watch')watch.push(p);else contact.push(p);});
-  const mkHealthItem=p=>`<div class="health-item" onclick="openDetail('${p.name.replace(/'/g,"\\'")}')"><span>${p.name}</span><span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${p.total}</span></div>`;
-  document.getElementById('h-good').innerHTML=good.slice(0,5).map(mkHealthItem).join('');
-  document.getElementById('h-watch').innerHTML=watch.slice(0,5).map(mkHealthItem).join('');
-  document.getElementById('h-contact').innerHTML=contact.slice(0,5).map(mkHealthItem).join('');
-  document.getElementById('h-good-count').textContent=`(${good.length})`;
-  document.getElementById('h-watch-count').textContent=`(${watch.length})`;
-  document.getElementById('h-contact-count').textContent=`(${contact.length})`;
-  const hCls=p=>{const h=getHealth(p.total,p.inb,p.outb);return h==='good'?'g':h==='watch'?'y':'r';};
-  document.getElementById('imp-table').innerHTML=pList.map(p=>
-    `<tr><td style="font-weight:500;cursor:pointer;color:var(--accent)" onclick="openDetail('${p.name.replace(/'/g,"\\'")}')">${p.name}</td><td>${p.country||'—'}</td><td style="font-family:var(--mono)">${p.total}</td><td style="font-family:var(--mono);color:var(--blue)">${p.inb}</td><td style="font-family:var(--mono);color:var(--yellow)">${p.outb}</td><td><span class="badge ${hCls(p)}">${getHealth(p.total,p.inb,p.outb)==='good'?'ไปต่อ':getHealth(p.total,p.inb,p.outb)==='watch'?'เฝ้าระวัง':'ควรติดต่อ'}</span></td><td><button style="font-size:11px;background:none;border:1px solid var(--border2);color:var(--text2);padding:3px 8px;cursor:pointer;font-family:var(--mono)" onclick="openDetail('${p.name.replace(/'/g,"\\'")}')">detail</button></td></tr>`
-  ).join('') || '<tr><td colspan="7" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
-  window._partners=partners;
 }
 
-let _currentDetail=null;
-function openDetail(name){
-  const p=window._partners?.[name];if(!p)return;
-  _currentDetail=name;
-  document.getElementById('det-name').textContent=name;
-  document.getElementById('det-country').textContent=p.country||'';
-  document.getElementById('det-score').textContent=p.total;
-  const maxP=Math.max(...p.pillars,1);
-  document.getElementById('det-pillars').innerHTML=PILLARS.map((pl,i)=>
-    `<div class="pillar-row"><span class="pillar-label">${pl}</span><div class="pillar-bar-wrap"><div class="pillar-bar" style="width:${Math.round(p.pillars[i]/maxP*100)}%;background:${PILLAR_COLORS[i]}"></div></div><span class="pillar-val">${p.pillars[i]}</span></div>`
-  ).join('');
-  document.getElementById('det-activities').innerHTML=p.activities.slice(0,10).map(a=>{
-    const dirCls=a.dir?.includes('เข้า')?'b':'y';const dirLbl=a.dir?.includes('เข้า')?'IN':'OUT';
-    return`<div style="padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;display:flex;align-items:center;gap:8px"><span class="badge ${dirCls}">${dirLbl}</span><span>${a.act||a.type||'—'}</span></div>`;
-  }).join('')+(p.activities.length>10?`<div style="font-size:11px;color:var(--text3);padding:6px 0">+${p.activities.length-10} more</div>`:'');
-  document.getElementById('impact-main').style.display='none';
-  document.getElementById('impact-detail').classList.add('open');
-}
-function closeDetail(){document.getElementById('impact-main').style.display='block';document.getElementById('impact-detail').classList.remove('open');}
+function renderOverview(){
+  const fy = document.getElementById('ov-fy-filter').value;
+  const intl = document.getElementById('ov-intl-filter').value;
+  
+  let filtered = pplData.filter(r=>r['ชื่อ']);
+  if(fy) filtered = filtered.filter(r=>(r['ปีงบประมาณ']||r['Fiscal Year']||'')==fy);
+  if(intl) filtered = filtered.filter(r=>(r['International/Domestic']||'')==intl);
 
-// ===== INSTITUTE =====
-function renderInstitute(){
-  if(!window._partners)return;
-  const q=(document.getElementById('inst-search').value||'').toLowerCase();
-  const f=document.getElementById('inst-filter').value;
-  let list=Object.values(window._partners).filter(p=>{
-    if(q&&!p.name.toLowerCase().includes(q)&&!p.country.toLowerCase().includes(q))return false;
-    if(f==='International'&&!p.isIntl)return false;
-    if(f==='National'&&p.isIntl)return false;
-    return true;
-  }).sort((a,b)=>b.total-a.total);
-  const actTypes=p=>{const types=new Set(p.activities.map(a=>a.type).filter(Boolean));return[...types].slice(0,3).map(t=>`<span class="badge x" style="margin-right:3px;font-size:9px">${t.slice(0,15)}</span>`).join('');};
-  document.getElementById('inst-table').innerHTML=list.map(p=>
-    `<tr><td style="font-weight:500">${p.name}</td><td>${p.country||'—'}</td><td style="font-family:var(--mono);color:var(--blue)">${p.inb}</td><td style="font-family:var(--mono);color:var(--yellow)">${p.outb}</td><td style="font-family:var(--mono);font-weight:600">${p.total}</td><td>${actTypes(p)}</td></tr>`
-  ).join('')||'<tr><td colspan="6" style="color:var(--text3)">ไม่พบข้อมูล</td></tr>';
-}
+  const inb = filtered.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('เข้า')).length;
+  const outb = filtered.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('ออก')).length;
 
-// ===== CALENDAR =====
-let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
-const MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-function processCalendar(){
-  const today=new Date();today.setHours(0,0,0,0);
-  const all=[...calData,...localEvents];
-  const upcoming=all.filter(r=>{const d=new Date(r['Start Date']||r.start||'');return d>=today;}).sort((a,b)=>new Date(a['Start Date']||a.start)-new Date(b['Start Date']||b.start)).slice(0,5);
-  const el=document.getElementById('ov-upcoming-list');
-  el.innerHTML=upcoming.length===0?'<div style="font-size:12px;color:var(--text3)">ไม่มีกิจกรรม</div>':
-    upcoming.map(r=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px">${r['Activity Name']||r.name||'—'}</span><span style="font-size:11px;color:var(--text2);font-family:var(--mono)">${r['Start Date']||r.start||''}</span></div>`).join('');
-  document.getElementById('ov-upcoming').textContent=upcoming.length;
-  renderCalendar();
-}
-function changeMonth(d){calMonth+=d;if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
-function getEvCls(cat){const c=(cat||'').toLowerCase();return c.includes('mou')?'mou':c.includes('perf')||c.includes('perform')?'perf':c.includes('sch')?'sch':c.includes('vis')?'vis':'conf';}
-function renderCalendar(){
-  document.getElementById('cal-month-label').textContent=`${MONTHS[calMonth]} ${calYear+543}`;
-  const grid=document.getElementById('cal-grid');
-  const hdrs=grid.querySelectorAll('.cal-day-name');
-  grid.innerHTML='';
-  hdrs.forEach(h=>grid.appendChild(h.cloneNode(true)));
-  const firstDay=new Date(calYear,calMonth,1).getDay();
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  const today=new Date();
-  const filterCat=document.getElementById('cal-view-filter')?.value||'all';
-  const all=[...calData,...localEvents].filter(r=>filterCat==='all'||(r['Category']||r.cat||'').toLowerCase().includes(filterCat.toLowerCase()));
-  for(let i=0;i<firstDay;i++)grid.innerHTML+=`<div class="cal-day other-month"></div>`;
-  for(let d=1;d<=daysInMonth;d++){
-    const isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
-    const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const dayEvs=all.filter(r=>{const s=(r['Start Date']||r.start||'').slice(0,10);const e=(r['End Date']||r.end||s).slice(0,10);return ds>=s&&ds<=e;});
-    let evH=dayEvs.slice(0,2).map(r=>`<div class="cal-ev ${getEvCls(r['Category']||r.cat)}" title="${r['Activity Name']||r.name||''}">${r['Activity Name']||r.name||''}</div>`).join('');
-    if(dayEvs.length>2)evH+=`<div style="font-size:9px;color:var(--text3);font-family:var(--mono)">+${dayEvs.length-2}</div>`;
-    grid.innerHTML+=`<div class="cal-day${isToday?' today':''}"><div class="cal-date">${d}</div>${evH}</div>`;
-  }
-  // list
-  const listAll=[...calData,...localEvents].sort((a,b)=>new Date(a['Start Date']||a.start)-new Date(b['Start Date']||b.start));
-  document.getElementById('cal-list').innerHTML=listAll.map(r=>
-    `<tr><td>${r['Activity Name']||r.name||'—'}</td><td>${r['Institute']||r.inst||'—'}</td><td><span class="badge x">${r['Category']||r.cat||'—'}</span></td><td style="font-size:11px;font-family:var(--mono)">${r['Start Date']||r.start||'—'}</td><td style="font-size:12px;color:var(--text2)">${r['Responsible Person']||r.person||'—'}</td></tr>`
-  ).join('')||'<tr><td colspan="5" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
-}
+  document.getElementById('ov-inbound').textContent = inb;
+  document.getElementById('ov-outbound').textContent = outb;
 
-// ===== ADD EVENT =====
-function openForm(){document.getElementById('form-overlay').classList.add('open');}
-function closeForm(){document.getElementById('form-overlay').classList.remove('open');}
-function addEvent(){
-  const name=document.getElementById('f-name').value.trim();
-  const inst=document.getElementById('f-inst').value.trim();
-  const cat=document.getElementById('f-cat').value;
-  const start=document.getElementById('f-start').value;
-  const end=document.getElementById('f-end').value||start;
-  const person=document.getElementById('f-person').value.trim();
-  if(!name||!start){alert('กรุณาใส่ชื่อกิจกรรมและวันที่');return;}
-  localEvents.push({'Activity Name':name,name,Institute:inst,inst,Category:cat,cat,'Start Date':start,start,'End Date':end,end,'Responsible Person':person,person,local:true});
-  closeForm();
-  ['f-name','f-inst','f-start','f-end','f-person'].forEach(id=>document.getElementById(id).value='');
-  renderCalendar();processCalendar();
-}
-
-// ===== PEOPLE =====
-function renderPeople(){
-  const dir=document.getElementById('p-dir').value;
-  const cat=document.getElementById('p-cat').value;
-  const q=document.getElementById('p-search').value.toLowerCase();
-  const rows=pplData.filter(r=>{
-    if(!r['ชื่อ'])return false;
-    if(dir&&!(r['ขาเข้า / ขาออก']||'').includes(dir))return false;
-    if(cat&&!(r['ประเภทผู้เข้าร่วม']||'').includes(cat))return false;
-    if(q&&!(r['ชื่อ']||'').toLowerCase().includes(q)&&!(r['หน่วยงาน']||'').toLowerCase().includes(q))return false;
-    return true;
-  });
-  const tbody=document.getElementById('p-tbody');
-  tbody.innerHTML=rows.map(r=>{
-    const d2=(r['ขาเข้า / ขาออก']||'').includes('เข้า')?'Inbound':'Outbound';
-    const dc=d2==='Inbound'?'g':'y';
-    const cv=r['ประเภทผู้เข้าร่วม']||'—';
-    const cc=cv.includes('Student')?'b':'x';
-    const s=r['วันที่เริ่ม']||'';const e=r['วันที่สิ้นสุด']||'';
-    const ds=s?(e&&e!==s?`${s}–${e}`:s):'—';
-    return`<tr><td style="font-weight:500">${r['ชื่อ']||'—'}</td><td><span class="badge ${cc}">${cv}</span></td><td><span class="badge ${dc}">${d2}</span></td><td>${r['หน่วยงาน']||'—'}</td><td>${r['ประเทศ']||'—'}</td><td style="font-size:12px">${r['ชื่องานที่เข้าร่วม']||r['ลักษณะกิจกรรมที่เข้าร่วม']||'—'}</td><td style="font-size:11px;font-family:var(--mono);color:var(--text2)">${ds}</td></tr>`;
-  }).join('')||'<tr><td colspan="7" style="color:var(--text3)">ไม่พบข้อมูล</td></tr>';
+  const labels = [];
+  if(fy) labels.push(`ปีงบ ${fy}`);
+  if(intl) labels.push(intl);
+  document.getElementById('ov-filter-label').textContent = labels.length ? `แสดง: ${labels.join(' · ')}` : '';
 }
 
 // ===== BOOT =====
