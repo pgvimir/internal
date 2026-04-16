@@ -9,6 +9,8 @@
 :root{--bg:#0f0f0f;--bg2:#161616;--bg3:#1e1e1e;--border:#2a2a2a;--border2:#333;--text:#e8e8e8;--text2:#888;--text3:#444;--accent:#c8a96e;--green:#4caf7d;--red:#e05c5c;--yellow:#d4a843;--blue:#5b8bd4;--purple:#9b6fd4;--font:'IBM Plex Sans Thai',sans-serif;--mono:'IBM Plex Mono',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;min-height:100vh}
+
+/* LOGIN */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center}
 .login-box{width:340px;padding:40px;border:1px solid var(--border2);background:var(--bg2)}
 .login-tag{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.15em;margin-bottom:28px}
@@ -17,9 +19,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .login-label{font-size:11px;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;display:block}
 .login-input{width:100%;padding:10px 12px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-family:var(--font);font-size:14px;margin-bottom:16px;outline:none;transition:border-color .2s}
 .login-input:focus{border-color:var(--accent)}
-.login-btn{width:100%;padding:11px;background:var(--accent);border:none;color:#000;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
+.login-btn{width:100%;padding:11px;background:var(--accent);border:none;color:#000;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer}
 .login-btn:hover{background:#d4b87a}
 .login-err{font-size:12px;color:var(--red);margin-top:10px;display:none}
+
+/* LAYOUT */
 #app{display:none}
 .sidebar{width:220px;position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
 .sidebar-logo{padding:20px;border-bottom:1px solid var(--border)}
@@ -40,6 +44,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .topbar-time{font-family:var(--mono);font-size:11px;color:var(--text3)}
 .content{padding:28px}
 .panel{display:none}.panel.active{display:block}
+
+/* COMPONENTS */
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:24px}
 .metric{background:var(--bg2);border:1px solid var(--border);padding:16px 18px}
 .metric-val{font-size:26px;font-weight:600;font-family:var(--mono)}
@@ -74,6 +80,46 @@ tr:hover td{background:var(--bg2)}
 .f-input{flex:1;min-width:160px}
 .add-btn{background:none;border:1px solid var(--accent);color:var(--accent);padding:7px 16px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.08em}
 .add-btn:hover{background:var(--accent);color:#000}
+
+/* CALENDAR */
+.cal-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;justify-content:space-between}
+.cal-toolbar-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cal-nav-btn{background:none;border:1px solid var(--border2);color:var(--text2);padding:5px 12px;cursor:pointer;font-family:var(--mono);font-size:12px}
+.cal-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.cal-label{font-size:15px;font-weight:600;font-family:var(--mono);min-width:180px}
+.view-toggle{display:flex;gap:4px}
+.view-btn{background:none;border:1px solid var(--border2);color:var(--text2);padding:5px 12px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.05em}
+.view-btn.active{background:var(--accent);border-color:var(--accent);color:#000}
+
+/* MONTH VIEW */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.cal-day-name{background:var(--bg2);padding:6px;text-align:center;font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase}
+.cal-day{background:var(--bg);padding:6px;min-height:80px}
+.cal-day.other{background:var(--bg2);opacity:.35}
+.cal-day.today .cal-date{color:var(--accent);font-weight:600}
+.cal-date{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:3px}
+.cal-ev{font-size:10px;padding:2px 4px;margin-bottom:2px;border-left:2px solid;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.cal-ev:hover{opacity:.8}
+.cal-ev.conf{border-color:var(--blue);background:rgba(91,139,212,.15);color:#8ab0e8}
+.cal-ev.mou{border-color:var(--accent);background:rgba(200,169,110,.15);color:var(--accent)}
+.cal-ev.perf{border-color:var(--green);background:rgba(76,175,125,.15);color:var(--green)}
+.cal-ev.sch{border-color:var(--yellow);background:rgba(212,168,67,.15);color:var(--yellow)}
+.cal-ev.vis{border-color:var(--purple);background:rgba(155,111,212,.15);color:var(--purple)}
+.cal-ev.new{border-color:var(--red);background:rgba(224,92,92,.15);color:#f09090}
+
+/* YEAR VIEW */
+.year-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:900px){.year-grid{grid-template-columns:repeat(2,1fr)}}
+.mini-month{background:var(--bg2);border:1px solid var(--border);padding:10px;cursor:pointer;transition:border-color .2s}
+.mini-month:hover{border-color:var(--accent)}
+.mini-month-title{font-size:11px;font-weight:600;font-family:var(--mono);margin-bottom:6px;color:var(--text)}
+.mini-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.mini-cell{font-size:9px;text-align:center;padding:2px;color:var(--text3);font-family:var(--mono);border-radius:2px}
+.mini-cell.has-ev{background:var(--accent);color:#000;border-radius:2px}
+.mini-cell.today-cell{outline:1px solid var(--accent)}
+.mini-cell.hdr{color:var(--text3);font-size:8px}
+
+/* FORM */
 .form-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center}
 .form-overlay.open{display:flex}
 .form-box{background:var(--bg2);border:1px solid var(--border2);padding:28px;width:460px;max-width:95vw}
@@ -89,7 +135,11 @@ tr:hover td{background:var(--bg2)}
 .form-submit:hover{background:#d4b87a}
 .form-cancel{flex:1;padding:10px;background:none;border:1px solid var(--border2);color:var(--text2);font-family:var(--font);font-size:13px;cursor:pointer}
 .form-cancel:hover{color:var(--text)}
-.data-status{font-size:11px;font-family:var(--mono);color:var(--text3);padding:4px 0;margin-bottom:12px}
+
+/* LEGEND */
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+.legend-item{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.legend-dot{width:8px;height:8px;border-radius:2px}
 </style>
 </head>
 <body>
@@ -100,9 +150,9 @@ tr:hover td{background:var(--bg2)}
     <div class="login-title">ยินดีต้อนรับ</div>
     <div class="login-sub">Princess Galyani Vadhana Institute of Music<br>International Relations — Internal System</div>
     <label class="login-label">Username</label>
-    <input class="login-input" id="uname" type="text" placeholder="username" autocomplete="off">
+    <input class="login-input" id="uname" type="text" autocomplete="off">
     <label class="login-label">Password</label>
-    <input class="login-input" id="upass" type="password" placeholder="••••••••">
+    <input class="login-input" id="upass" type="password">
     <button class="login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
     <div class="login-err" id="login-err">Username หรือ Password ไม่ถูกต้อง</div>
   </div>
@@ -121,7 +171,6 @@ tr:hover td{background:var(--bg2)}
     <div class="nav-divider"></div>
     <div class="nav-item" onclick="nav('mou',this)"><span class="nav-dot"></span>MOU</div>
     <div class="nav-item" onclick="nav('calendar',this)"><span class="nav-dot"></span>Calendar</div>
-    <div class="nav-item" onclick="nav('institute',this)"><span class="nav-dot"></span>Each Institute</div>
     <div class="sidebar-footer">
       <div class="logout-btn" onclick="logout()">LOGOUT</div>
     </div>
@@ -137,15 +186,15 @@ tr:hover td{background:var(--bg2)}
       <!-- OVERVIEW -->
       <div class="panel active" id="panel-overview">
         <div class="filters">
-          <select class="f-select" id="ov-fy-filter" onchange="renderOverview()" style="min-width:160px">
+          <select class="f-select" id="ov-fy" onchange="renderOverview()" style="min-width:160px">
             <option value="">ทุกปีงบประมาณ</option>
           </select>
-          <select class="f-select" id="ov-intl-filter" onchange="renderOverview()">
+          <select class="f-select" id="ov-intl" onchange="renderOverview()">
             <option value="">International + Domestic</option>
             <option value="International">International</option>
             <option value="Domestic">Domestic</option>
           </select>
-          <span class="data-status" id="ov-filter-label"></span>
+          <span style="font-size:11px;color:var(--text3);font-family:var(--mono);align-self:center" id="ov-label"></span>
         </div>
         <div class="metrics">
           <div class="metric"><div class="metric-val b" id="ov-mou">—</div><div class="metric-lbl">MOU Active</div></div>
@@ -166,18 +215,61 @@ tr:hover td{background:var(--bg2)}
         <div id="mou-loading" class="loading">กำลังโหลด MOU...</div>
         <div id="mou-content" style="display:none">
           <div class="sec-title">International</div>
-          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>ประเทศ</th><th>ประเภท</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-intl"></tbody></table></div>
-          <div class="sec-title">National</div>
-          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>ประเภท</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-natl"></tbody></table></div>
-          <div class="sec-title">รอดำเนินการ</div>
-          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>ประเภท</th><th>สถานะ</th></tr></thead><tbody id="mou-pending"></tbody></table></div>
+          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>ประเทศ</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-intl"></tbody></table></div>
+          <div class="sec-title">National — ระดับมหาวิทยาลัย</div>
+          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-uni"></tbody></table></div>
+          <div class="sec-title">National — ระดับโรงเรียน</div>
+          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-school"></tbody></table></div>
+          <div class="sec-title">National — ระดับหน่วยงาน</div>
+          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-org"></tbody></table></div>
+          <div class="sec-title">Network</div>
+          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>ประเทศ</th><th>สถานะ</th></tr></thead><tbody id="mou-network"></tbody></table></div>
         </div>
       </div>
 
       <!-- CALENDAR -->
       <div class="panel" id="panel-calendar">
-        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;justify-content:space-between">
-          <div class="filters" style="margin-bottom:0">
+        <div class="cal-toolbar">
+          <div class="cal-toolbar-left">
+            <button class="cal-nav-btn" onclick="calPrev()">&#8592;</button>
+            <div class="cal-label" id="cal-label"></div>
+            <button class="cal-nav-btn" onclick="calNext()">&#8594;</button>
+            <button class="cal-nav-btn" onclick="calToday()" style="font-size:11px">วันนี้</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="view-toggle">
+              <button class="view-btn active" id="btn-month" onclick="setView('month')">เดือน</button>
+              <button class="view-btn" id="btn-year" onclick="setView('year')">ปี</button>
+            </div>
+            <button class="add-btn" onclick="openForm()">+ เพิ่มกิจกรรม</button>
+          </div>
+        </div>
+
+        <!-- MONTH VIEW -->
+        <div id="cal-month-view">
+          <div class="cal-grid" id="cal-grid">
+            <div class="cal-day-name">อา</div><div class="cal-day-name">จ</div><div class="cal-day-name">อ</div>
+            <div class="cal-day-name">พ</div><div class="cal-day-name">พฤ</div><div class="cal-day-name">ศ</div><div class="cal-day-name">ส</div>
+          </div>
+        </div>
+
+        <!-- YEAR VIEW -->
+        <div id="cal-year-view" style="display:none">
+          <div class="year-grid" id="year-grid"></div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Conference</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>MOU</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Performing</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>Scholarship</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Visiting</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>เพิ่มเอง</div>
+        </div>
+
+        <div class="card" style="margin-top:20px">
+          <div class="card-title">รายการกิจกรรมทั้งหมด</div>
+          <div class="filters" style="margin-bottom:12px">
             <select class="f-select" id="cal-filter-cat" onchange="renderCalList()">
               <option value="">ทุกประเภท</option>
               <option value="Conference">Conference</option>
@@ -186,35 +278,12 @@ tr:hover td{background:var(--bg2)}
               <option value="Scholarship">Scholarship</option>
               <option value="Visiting">Visiting</option>
             </select>
-            <input class="f-input" id="cal-search" placeholder="ค้นหากิจกรรม..." oninput="renderCalList()" style="max-width:220px">
+            <input class="f-input" id="cal-search" placeholder="ค้นหากิจกรรม..." oninput="renderCalList()">
           </div>
-          <button class="add-btn" onclick="openForm()">+ เพิ่มกิจกรรม</button>
-        </div>
-        <div class="data-status" id="cal-status"></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>ชื่อกิจกรรม</th><th>สถาบัน / ประเทศ</th><th>ประเภท</th><th>วันเริ่ม</th><th>วันสิ้นสุด</th><th>ผู้รับผิดชอบ</th></tr></thead>
-            <tbody id="cal-list"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- EACH INSTITUTE -->
-      <div class="panel" id="panel-institute">
-        <div class="filters">
-          <input class="f-input" id="inst-search" placeholder="ค้นหาสถาบัน..." oninput="renderInstitute()">
-          <select class="f-select" id="inst-filter" onchange="renderInstitute()">
-            <option value="">ทั้งหมด</option>
-            <option value="International">International</option>
-            <option value="Domestic">Domestic</option>
-          </select>
-        </div>
-        <div class="data-status" id="inst-status"></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>สถาบัน</th><th>ประเทศ</th><th>Inbound</th><th>Outbound</th><th>รวม</th><th>ประเภทกิจกรรม</th></tr></thead>
-            <tbody id="inst-table"></tbody>
-          </table>
+          <div class="table-wrap" style="margin-bottom:0">
+            <table><thead><tr><th>ชื่อกิจกรรม</th><th>สถาบัน</th><th>ประเภท</th><th>วันเริ่ม</th><th>วันสิ้นสุด</th><th>ผู้รับผิดชอบ</th></tr></thead>
+            <tbody id="cal-list"></tbody></table>
+          </div>
         </div>
       </div>
 
@@ -251,26 +320,17 @@ const USERS={'IR1':'admin123'};
 function doLogin(){
   const u=document.getElementById('uname').value.trim();
   const p=document.getElementById('upass').value;
-  if(USERS[u]&&USERS[u]===p){
-    sessionStorage.setItem('pgvim_auth',u);
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='block';
-    initApp();
-  } else {
-    document.getElementById('login-err').style.display='block';
-  }
+  if(USERS[u]&&USERS[u]===p){sessionStorage.setItem('pgvim_auth',u);document.getElementById('login-screen').style.display='none';document.getElementById('app').style.display='block';initApp();}
+  else document.getElementById('login-err').style.display='block';
 }
 document.getElementById('upass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 function logout(){sessionStorage.removeItem('pgvim_auth');location.reload();}
-if(sessionStorage.getItem('pgvim_auth')){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='block';
-}
+if(sessionStorage.getItem('pgvim_auth')){document.getElementById('login-screen').style.display='none';document.getElementById('app').style.display='block';}
 
 function updateClock(){document.getElementById('clock').textContent=new Date().toLocaleString('th-TH',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short',year:'numeric'});}
 setInterval(updateClock,1000);updateClock();
 
-const navTitles={overview:'ภาพรวม',mou:'MOU',calendar:'Calendar',institute:'Each Institute'};
+const navTitles={overview:'ภาพรวม',mou:'MOU',calendar:'Calendar'};
 function nav(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -281,75 +341,70 @@ function nav(id,el){
 
 let mouData=[],calData=[],pplData=[],localEvents=[];
 
-// ดึง JSON จาก repo (ไม่มี CORS)
 async function loadJSON(path){
-  try{
-    const r=await fetch(path+'?t='+Date.now());
-    if(!r.ok)throw new Error(r.status);
-    return await r.json();
-  }catch(e){
-    console.warn('Cannot load '+path,e);
-    return null;
-  }
+  try{const r=await fetch(path+'?t='+Date.now());if(!r.ok)throw new Error(r.status);return await r.json();}
+  catch(e){console.warn('Cannot load '+path,e);return null;}
 }
 
 async function initApp(){
   updateClock();
-  // โหลดพร้อมกันทุกไฟล์
-  const [mou,cal,ppl]=await Promise.all([
-    loadJSON('data/mou.json'),
-    loadJSON('data/calendar.json'),
-    loadJSON('data/people.json')
-  ]);
-
+  const [mou,cal,ppl]=await Promise.all([loadJSON('data/mou.json'),loadJSON('data/calendar.json'),loadJSON('data/people.json')]);
   if(mou){mouData=mou;processMOU();}
-  else{
-    document.getElementById('mou-loading').textContent='ยังไม่มีข้อมูล — รอ GitHub Actions รันก่อนครับ';
-  }
-
+  else document.getElementById('mou-loading').textContent='ยังไม่มีข้อมูล — รอ GitHub Actions รันก่อนครับ';
   if(cal){calData=cal;processCalendar();}
   if(ppl){pplData=ppl;processPeople();}
+  renderCalendar();
 }
 
 // MOU
 function processMOU(){
   const today=new Date();
-  const intl=[],natl=[],pending=[];
+  const intl=[],uni=[],school=[],org=[],network=[];
   let totalActive=0,expiring=0;
   const expiringList=[];
+  let section='',subSection='';
 
   mouData.forEach(row=>{
-    const name=row['Name']||'';
+    const no=(row['No']||'').trim();
+    const name=(row['Name']||'').trim();
     const country=row['Country']||'';
-    const type=row['Type']||'';
     const status=row['Status']||'';
     const signDate=row['Sign date']||'';
     const expired=row['Expired']||'';
     const file=row['File']||'';
-    if(!name)return;
+
+    // section headers
+    if(no==='National'||name==='National'){section='national';subSection='uni';return;}
+    if(no==='International'||name==='International'){section='international';subSection='';return;}
+    if(no==='Network'||name==='Network'){section='network';subSection='';return;}
+    if(name==='ระดับมหาวิทยาลัย'){subSection='uni';return;}
+    if(name==='ระดับโรงเรียน'){subSection='school';return;}
+    if(name==='ระดับหน่วยงาน'){subSection='org';return;}
+    if(name==='Institute Name'||!name)return;
 
     const sLow=status.toLowerCase();
-    const allVals=Object.values(row).join(' ');
-    const subStatus=allVals.includes('In process')?'In process':
-      allVals.includes('Waiting for renew')?'Waiting for renew':
-      allVals.includes('Waiting for discussion')?'Waiting for discussion':'';
-
-    if(sLow.includes('new')){pending.push({name,country,type,status,subStatus});return;}
-    if(sLow.includes('expired')&&subStatus){pending.push({name,country,type,status:subStatus});return;}
+    // ซ่อน New/รอดำเนินการ
+    if(sLow.includes('new')||sLow===''&&!signDate)return;
 
     let daysLeft=null;
-    if(expired){const d=new Date(expired);if(!isNaN(d))daysLeft=Math.round((d-today)/86400000);}
+    if(expired&&expired!==''){
+      const d=new Date(expired);
+      if(!isNaN(d))daysLeft=Math.round((d-today)/86400000);
+    }
     if(sLow.includes('active'))totalActive++;
     if(daysLeft!==null&&daysLeft<=90&&daysLeft>=0){expiring++;expiringList.push({name,country,daysLeft,expired});}
 
-    const r2={name,country,type,status,signDate,expired,file,daysLeft};
-    if(country&&country!=='Thailand')intl.push(r2);else natl.push(r2);
+    const r2={name,country,status,signDate,expired,file,daysLeft};
+    if(section==='international')intl.push(r2);
+    else if(section==='network')network.push(r2);
+    else if(subSection==='school')school.push(r2);
+    else if(subSection==='org')org.push(r2);
+    else uni.push(r2);
   });
 
   document.getElementById('ov-mou').textContent=totalActive;
   document.getElementById('ov-expiring').textContent=expiring;
 
-  // alerts
   const alertBox=document.getElementById('ov-alerts');
   alertBox.innerHTML='';
   expiringList.sort((a,b)=>a.daysLeft-b.daysLeft).slice(0,3).forEach(m=>{
@@ -360,37 +415,65 @@ function processMOU(){
   document.getElementById('ov-expiring-list').innerHTML=expiringList.length===0
     ?'<div style="font-size:12px;color:var(--text3)">ไม่มี MOU ใกล้หมดอายุ</div>'
     :expiringList.sort((a,b)=>a.daysLeft-b.daysLeft).map(m=>
-      `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
-        <span style="font-size:12px">${m.name}</span>
-        <span class="badge ${m.daysLeft<=30?'r':'y'}">${m.daysLeft}d</span>
+      `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:12px">${m.name}</span><span class="badge ${m.daysLeft<=30?'r':'y'}">${m.daysLeft}d</span>
       </div>`).join('');
 
   document.getElementById('mou-loading').style.display='none';
   document.getElementById('mou-content').style.display='block';
 
-  const mkRow=(r,showCountry)=>{
-    const bc=r.status?.toLowerCase().includes('active')?'g':r.status?.toLowerCase().includes('expired')?'r':'x';
-    const db=r.daysLeft!==null&&r.daysLeft<=90?`<span class="badge y" style="margin-left:5px">${r.daysLeft}d</span>`:'';
-    const fl=r.file?`<a class="file-link" href="${r.file}" target="_blank">PDF ↗</a>`:'—';
-    const ctd=showCountry?`<td>${r.country||'—'}</td>`:'';
-    return`<tr><td>${r.name}</td>${ctd}<td><span class="badge x">${r.type||'—'}</span></td><td><span class="badge ${bc}">${r.status||'—'}</span>${db}</td><td style="font-size:11px">${r.signDate||'—'}</td><td style="font-size:11px">${r.expired||'—'}</td><td>${fl}</td></tr>`;
-  };
-  document.getElementById('mou-intl').innerHTML=intl.map(r=>mkRow(r,true)).join('')||'<tr><td colspan="7" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
-  document.getElementById('mou-natl').innerHTML=natl.map(r=>mkRow(r,false)).join('')||'<tr><td colspan="6" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
-  document.getElementById('mou-pending').innerHTML=pending.map(r=>
-    `<tr><td>${r.name}</td><td><span class="badge x">${r.type||'—'}</span></td><td><span class="badge b">${r.subStatus||r.status||'—'}</span></td></tr>`
-  ).join('')||'<tr><td colspan="3" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
+  const bc=s=>s?.toLowerCase().includes('active')?'g':s?.toLowerCase().includes('expired')?'r':'x';
+  const db=r=>r.daysLeft!==null&&r.daysLeft<=90?`<span class="badge y" style="margin-left:5px">${r.daysLeft}d</span>`:'';
+  const fl=r=>r.file?`<a class="file-link" href="${r.file}" target="_blank">PDF ↗</a>`:'—';
+
+  const mkIntl=r=>`<tr><td style="font-weight:500">${r.name}</td><td>${r.country||'—'}</td><td><span class="badge ${bc(r.status)}">${r.status||'—'}</span>${db(r)}</td><td style="font-size:11px">${r.signDate||'—'}</td><td style="font-size:11px">${r.expired||'—'}</td><td>${fl(r)}</td></tr>`;
+  const mkNatl=r=>`<tr><td style="font-weight:500">${r.name}</td><td><span class="badge ${bc(r.status)}">${r.status||'—'}</span>${db(r)}</td><td style="font-size:11px">${r.signDate||'—'}</td><td style="font-size:11px">${r.expired||'—'}</td><td>${fl(r)}</td></tr>`;
+  const mkNet=r=>`<tr><td style="font-weight:500">${r.name}</td><td>${r.country||'—'}</td><td><span class="badge ${bc(r.status)}">${r.status||'—'}</span></td></tr>`;
+  const empty=(n)=>`<tr><td colspan="${n}" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>`;
+
+  document.getElementById('mou-intl').innerHTML=intl.map(mkIntl).join('')||empty(6);
+  document.getElementById('mou-uni').innerHTML=uni.map(mkNatl).join('')||empty(5);
+  document.getElementById('mou-school').innerHTML=school.map(mkNatl).join('')||empty(5);
+  document.getElementById('mou-org').innerHTML=org.map(mkNatl).join('')||empty(5);
+  document.getElementById('mou-network').innerHTML=network.map(mkNet).join('')||empty(3);
 }
 
-// Calendar
-function processCalendar(){
-  const all=[...calData,...localEvents];
-  const today=new Date();today.setHours(0,0,0,0);
-  const upcoming=all.filter(r=>{
-    const d=new Date(r['Start Date']||r.start||'');
-    return !isNaN(d)&&d>=today;
-  }).sort((a,b)=>new Date(a['Start Date']||a.start)-new Date(b['Start Date']||b.start)).slice(0,5);
+// PEOPLE & OVERVIEW
+function processPeople(){
+  populateFYFilter();
+  renderOverview();
+}
 
+function populateFYFilter(){
+  const years=[...new Set(pplData.map(r=>r['ปีงบประมาณ']||'').filter(Boolean))].sort().reverse();
+  const sel=document.getElementById('ov-fy');
+  sel.innerHTML='<option value="">ทุกปีงบประมาณ</option>';
+  years.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=`ปีงบ ${y}`;sel.appendChild(o);});
+}
+
+function renderOverview(){
+  const fy=document.getElementById('ov-fy').value;
+  const intl=document.getElementById('ov-intl').value;
+  let f=pplData.filter(r=>r['ชื่อ']);
+  if(fy)f=f.filter(r=>(r['ปีงบประมาณ']||'')==fy);
+  if(intl)f=f.filter(r=>(r['International/Domestic']||'')==intl);
+  document.getElementById('ov-inbound').textContent=f.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('เข้า')).length;
+  document.getElementById('ov-outbound').textContent=f.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('ออก')).length;
+  const labels=[];
+  if(fy)labels.push(`ปีงบ ${fy}`);if(intl)labels.push(intl);
+  document.getElementById('ov-label').textContent=labels.length?`แสดง: ${labels.join(' · ')}`:`ทั้งหมด ${pplData.length} รายการ`;
+}
+
+// CALENDAR
+let calYear=new Date().getFullYear(),calMonth=new Date().getMonth(),calView='month';
+const MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const MONTHS_SHORT=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+function processCalendar(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const all=[...calData,...localEvents];
+  const upcoming=all.filter(r=>{const d=new Date(r['Start Date']||r.start||'');return !isNaN(d)&&d>=today;})
+    .sort((a,b)=>new Date(a['Start Date']||a.start)-new Date(b['Start Date']||b.start)).slice(0,5);
   document.getElementById('ov-upcoming').textContent=upcoming.length;
   document.getElementById('ov-upcoming-list').innerHTML=upcoming.length===0
     ?'<div style="font-size:12px;color:var(--text3)">ไม่มีกิจกรรม</div>'
@@ -398,10 +481,85 @@ function processCalendar(){
         <span style="font-size:12px">${r['Activity Name']||r.name||'—'}</span>
         <span style="font-size:11px;color:var(--text2);font-family:var(--mono)">${r['Start Date']||r.start||''}</span>
       </div>`).join('');
-
-  const el=document.getElementById('cal-status');
-  if(el)el.textContent=`${calData.length} รายการจาก Sheet + ${localEvents.length} รายการที่เพิ่มเอง`;
   renderCalList();
+}
+
+function setView(v){
+  calView=v;
+  document.getElementById('btn-month').classList.toggle('active',v==='month');
+  document.getElementById('btn-year').classList.toggle('active',v==='year');
+  document.getElementById('cal-month-view').style.display=v==='month'?'block':'none';
+  document.getElementById('cal-year-view').style.display=v==='year'?'block':'none';
+  renderCalendar();
+}
+
+function calPrev(){if(calView==='month'){calMonth--;if(calMonth<0){calMonth=11;calYear--;}}else calYear--;renderCalendar();}
+function calNext(){if(calView==='month'){calMonth++;if(calMonth>11){calMonth=0;calYear++;}}else calYear++;renderCalendar();}
+function calToday(){calYear=new Date().getFullYear();calMonth=new Date().getMonth();renderCalendar();}
+
+function getEvCls(cat){
+  const c=(cat||'').toLowerCase();
+  if(c.includes('mou'))return'mou';if(c.includes('perf'))return'perf';
+  if(c.includes('sch'))return'sch';if(c.includes('vis'))return'vis';return'conf';
+}
+
+function getEventsOnDate(ds){
+  return[...calData,...localEvents].filter(r=>{
+    const s=(r['Start Date']||r.start||'').slice(0,10);
+    const e=(r['End Date']||r.end||s).slice(0,10);
+    return s&&ds>=s&&ds<=e;
+  });
+}
+
+function renderCalendar(){
+  if(calView==='month')renderMonthView();
+  else renderYearView();
+}
+
+function renderMonthView(){
+  document.getElementById('cal-label').textContent=`${MONTHS[calMonth]} ${calYear+543}`;
+  const grid=document.getElementById('cal-grid');
+  const hdrs=Array.from(grid.querySelectorAll('.cal-day-name')).map(h=>h.cloneNode(true));
+  grid.innerHTML='';
+  hdrs.forEach(h=>grid.appendChild(h));
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date();
+  for(let i=0;i<firstDay;i++)grid.innerHTML+=`<div class="cal-day other"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
+    const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evs=getEventsOnDate(ds);
+    let evH=evs.slice(0,3).map(r=>{
+      const cls=r.local?'new':getEvCls(r['Category']||r.cat);
+      return`<div class="cal-ev ${cls}" title="${r['Activity Name']||r.name||''}">${r['Activity Name']||r.name||''}</div>`;
+    }).join('');
+    if(evs.length>3)evH+=`<div style="font-size:9px;color:var(--text3);font-family:var(--mono)">+${evs.length-3}</div>`;
+    grid.innerHTML+=`<div class="cal-day${isToday?' today':''}"><div class="cal-date">${d}</div>${evH}</div>`;
+  }
+}
+
+function renderYearView(){
+  document.getElementById('cal-label').textContent=`${calYear+543}`;
+  const grid=document.getElementById('year-grid');
+  grid.innerHTML='';
+  const today=new Date();
+  for(let m=0;m<12;m++){
+    const daysInMonth=new Date(calYear,m+1,0).getDate();
+    const firstDay=new Date(calYear,m,1).getDay();
+    let cells='<div class="mini-cell hdr">อา</div><div class="mini-cell hdr">จ</div><div class="mini-cell hdr">อ</div><div class="mini-cell hdr">พ</div><div class="mini-cell hdr">พฤ</div><div class="mini-cell hdr">ศ</div><div class="mini-cell hdr">ส</div>';
+    for(let i=0;i<firstDay;i++)cells+=`<div class="mini-cell"></div>`;
+    for(let d=1;d<=daysInMonth;d++){
+      const ds=`${calYear}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const hasEv=getEventsOnDate(ds).length>0;
+      const isToday=today.getFullYear()===calYear&&today.getMonth()===m&&today.getDate()===d;
+      cells+=`<div class="mini-cell${hasEv?' has-ev':''}${isToday?' today-cell':''}">${d}</div>`;
+    }
+    grid.innerHTML+=`<div class="mini-month" onclick="calMonth=${m};setView('month')">
+      <div class="mini-month-title">${MONTHS_SHORT[m]}</div>
+      <div class="mini-grid">${cells}</div>
+    </div>`;
+  }
 }
 
 function getCatBadge(cat){
@@ -420,7 +578,7 @@ function renderCalList(){
     return name;
   });
   document.getElementById('cal-list').innerHTML=all.map(r=>{
-    const isLocal=r.local?'<span style="font-size:9px;color:var(--accent);font-family:var(--mono);margin-left:4px">★NEW</span>':'';
+    const isLocal=r.local?'<span style="font-size:9px;color:var(--red);font-family:var(--mono);margin-left:4px">★NEW</span>':'';
     return`<tr>
       <td style="font-weight:500">${r['Activity Name']||r.name||'—'}${isLocal}</td>
       <td style="font-size:12px;color:var(--text2)">${[r['Institute']||r.inst||'',r['Country']||r.country||''].filter(Boolean).join(' · ')||'—'}</td>
@@ -432,84 +590,16 @@ function renderCalList(){
   }).join('')||'<tr><td colspan="6" style="color:var(--text3);padding:16px">ไม่พบข้อมูล</td></tr>';
 }
 
-// People / Institute
-function processPeople(){
-  populateFYFilter();
-  renderOverview();
-  renderInstitute();
-  const el=document.getElementById('inst-status');
-  if(el)el.textContent=`${pplData.length} รายการ`;
-}
-
-function populateFYFilter(){
-  const years=[...new Set(pplData.map(r=>r['ปีงบประมาณ']||r['Fiscal Year']||'').filter(Boolean))].sort().reverse();
-  const sel=document.getElementById('ov-fy-filter');
-  sel.innerHTML='<option value="">ทุกปีงบประมาณ</option>';
-  years.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=`ปีงบ ${y}`;sel.appendChild(o);});
-}
-
-function renderOverview(){
-  const fy=document.getElementById('ov-fy-filter').value;
-  const intl=document.getElementById('ov-intl-filter').value;
-  let f=pplData.filter(r=>r['ชื่อ']);
-  if(fy)f=f.filter(r=>(r['ปีงบประมาณ']||r['Fiscal Year']||'')==fy);
-  if(intl)f=f.filter(r=>(r['International/Domestic']||'')==intl);
-  document.getElementById('ov-inbound').textContent=f.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('เข้า')).length;
-  document.getElementById('ov-outbound').textContent=f.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('ออก')).length;
-  const labels=[];
-  if(fy)labels.push(`ปีงบ ${fy}`);
-  if(intl)labels.push(intl);
-  document.getElementById('ov-filter-label').textContent=labels.length?`แสดง: ${labels.join(' · ')}`:
-    `ข้อมูลทั้งหมด ${pplData.length} รายการ`;
-}
-
-function renderInstitute(){
-  const q=(document.getElementById('inst-search')?.value||'').toLowerCase();
-  const f=document.getElementById('inst-filter')?.value||'';
-  const partners={};
-  pplData.filter(r=>r['ชื่อ']).forEach(r=>{
-    const inst=r['หน่วยงาน']||'Unknown';
-    const country=r['ประเทศ']||'';
-    const intlDom=r['International/Domestic']||'';
-    if(!partners[inst])partners[inst]={name:inst,country,intlDom,inb:0,outb:0,types:new Set()};
-    if((r['ขาเข้า / ขาออก']||'').includes('เข้า'))partners[inst].inb++;else partners[inst].outb++;
-    const act=r['ลักษณะกิจกรรมที่เข้าร่วม']||'';if(act)partners[inst].types.add(act);
-  });
-  let list=Object.values(partners).filter(p=>{
-    if(q&&!p.name.toLowerCase().includes(q)&&!p.country.toLowerCase().includes(q))return false;
-    if(f&&p.intlDom!==f)return false;
-    return true;
-  }).sort((a,b)=>(b.inb+b.outb)-(a.inb+a.outb));
-  document.getElementById('inst-table').innerHTML=list.map(p=>{
-    const total=p.inb+p.outb;
-    const types=[...p.types].slice(0,2).map(t=>`<span class="badge x" style="font-size:9px;margin-right:2px">${t.slice(0,14)}</span>`).join('');
-    return`<tr><td style="font-weight:500">${p.name}</td><td>${p.country||'—'}</td>
-      <td style="font-family:var(--mono);color:var(--blue)">${p.inb}</td>
-      <td style="font-family:var(--mono);color:var(--yellow)">${p.outb}</td>
-      <td style="font-family:var(--mono);font-weight:600">${total}</td>
-      <td>${types}</td></tr>`;
-  }).join('')||'<tr><td colspan="6" style="color:var(--text3)">ไม่พบข้อมูล</td></tr>';
-}
-
-// Add event
 function openForm(){document.getElementById('form-overlay').classList.add('open');}
 function closeForm(){document.getElementById('form-overlay').classList.remove('open');}
 function addEvent(){
   const name=document.getElementById('f-name').value.trim();
   const start=document.getElementById('f-start').value;
   if(!name||!start){alert('กรุณาใส่ชื่อกิจกรรมและวันที่');return;}
-  localEvents.push({
-    'Activity Name':name,name,
-    'Institute':document.getElementById('f-inst').value.trim(),
-    'Category':document.getElementById('f-cat').value,
-    'Start Date':start,start,
-    'End Date':document.getElementById('f-end').value||start,
-    'Responsible Person':document.getElementById('f-person').value.trim(),
-    local:true
-  });
+  localEvents.push({'Activity Name':name,name,'Institute':document.getElementById('f-inst').value.trim(),'Category':document.getElementById('f-cat').value,'Start Date':start,start,'End Date':document.getElementById('f-end').value||start,'Responsible Person':document.getElementById('f-person').value.trim(),local:true});
   closeForm();
   ['f-name','f-inst','f-start','f-end','f-person'].forEach(id=>document.getElementById(id).value='');
-  processCalendar();
+  renderCalendar();processCalendar();
 }
 
 if(sessionStorage.getItem('pgvim_auth'))initApp();
