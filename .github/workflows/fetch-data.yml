@@ -13,26 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Fetch and convert CSV to JSON
+      - name: Fetch CSV files
         run: |
           mkdir -p data
           curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vQc5N_5tnBnYsXEyY6NRxNZYJJINVfoZp-VzCECkaQl9CPy-gRMoQYO6McIly6-l-OQCVKNCj_vXs0w/pub?gid=51578232&single=true&output=csv" -o data/mou.csv
           curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vQR4S2Jxta5T3opzmq5EHWysW6j9-lea2Fxd94AUaKdoNxIvuuQa7MNaMeUVydvR6Ep5pQavWBKFRjg/pub?gid=0&single=true&output=csv" -o data/calendar.csv
           curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vRVWxk12K9-pbBURP7RKwmvxH0j4bY0LEbml4FMv3J0_H5Q5DfVelKg5n1wd_EdGx_Bp4mZwgWrdflk/pub?output=csv" -o data/people.csv
-          python3 - << 'EOF'
-import csv, json
 
-def to_json(src, dst):
-    with open(src, encoding='utf-8') as f:
-        rows = [r for r in csv.DictReader(f) if any(v.strip() for v in r.values())]
-    with open(dst, 'w', encoding='utf-8') as f:
-        json.dump(rows, f, ensure_ascii=False, indent=2)
-    print(f'{dst}: {len(rows)} rows')
-
-to_json('data/mou.csv', 'data/mou.json')
-to_json('data/calendar.csv', 'data/calendar.json')
-to_json('data/people.csv', 'data/people.json')
-EOF
+      - name: Convert CSV to JSON
+        run: python3 convert.py
 
       - name: Commit and push
         run: |
