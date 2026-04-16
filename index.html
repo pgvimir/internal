@@ -5,13 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PGVIM IR — Internal System</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
 :root{--bg:#0f0f0f;--bg2:#161616;--bg3:#1e1e1e;--border:#2a2a2a;--border2:#333;--text:#e8e8e8;--text2:#888;--text3:#444;--accent:#c8a96e;--green:#4caf7d;--red:#e05c5c;--yellow:#d4a843;--blue:#5b8bd4;--purple:#9b6fd4;--font:'IBM Plex Sans Thai',sans-serif;--mono:'IBM Plex Mono',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;min-height:100vh}
-
-/* LOGIN */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center}
 .login-box{width:340px;padding:40px;border:1px solid var(--border2);background:var(--bg2)}
 .login-tag{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.15em;margin-bottom:28px}
@@ -23,15 +20,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .login-btn{width:100%;padding:11px;background:var(--accent);border:none;color:#000;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:background .2s}
 .login-btn:hover{background:#d4b87a}
 .login-err{font-size:12px;color:var(--red);margin-top:10px;display:none}
-
-/* APP LAYOUT */
 #app{display:none}
 .sidebar{width:220px;position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
 .sidebar-logo{padding:20px;border-bottom:1px solid var(--border)}
 .sidebar-tag{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.15em}
 .sidebar-name{font-size:15px;font-weight:600;margin-top:4px}
 .sidebar-name span{color:var(--accent)}
-.nav-section{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);padding:14px 20px 6px;font-weight:500}
 .nav-item{padding:9px 20px;font-size:13px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s;border-left:2px solid transparent;text-decoration:none}
 .nav-item:hover{color:var(--text);background:var(--bg3)}
 .nav-item.active{color:var(--accent);border-left-color:var(--accent);background:var(--bg3)}
@@ -40,35 +34,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14
 .sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);margin-top:auto}
 .logout-btn{font-size:11px;color:var(--text3);cursor:pointer;font-family:var(--mono)}
 .logout-btn:hover{color:var(--red)}
-
 .main{margin-left:220px;min-height:100vh}
 .topbar{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:sticky;top:0;z-index:10}
 .topbar-title{font-size:15px;font-weight:600}
 .topbar-time{font-family:var(--mono);font-size:11px;color:var(--text3)}
 .content{padding:28px}
 .panel{display:none}.panel.active{display:block}
-
-/* COMPONENTS */
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:24px}
 .metric{background:var(--bg2);border:1px solid var(--border);padding:16px 18px}
 .metric-val{font-size:26px;font-weight:600;font-family:var(--mono)}
-.metric-val.g{color:var(--green)}.metric-val.r{color:var(--red)}.metric-val.y{color:var(--yellow)}.metric-val.b{color:var(--blue)}.metric-val.p{color:var(--purple)}
+.metric-val.g{color:var(--green)}.metric-val.r{color:var(--red)}.metric-val.y{color:var(--yellow)}.metric-val.b{color:var(--blue)}
 .metric-lbl{font-size:11px;color:var(--text2);margin-top:3px}
-.metric-sub{font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
-
 .alerts{margin-bottom:20px;display:flex;flex-direction:column;gap:6px}
 .alert{padding:10px 14px;border-left:3px solid;font-size:12px;display:flex;align-items:center;gap:12px}
 .alert.r{border-color:var(--red);background:rgba(224,92,92,.07);color:#f09090}
 .alert.y{border-color:var(--yellow);background:rgba(212,168,67,.07);color:#e0c070}
 .alert-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;min-width:55px}
-
 .sec-title{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
-@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
 .card{background:var(--bg2);border:1px solid var(--border);padding:16px;margin-bottom:16px}
-.card-title{font-size:13px;font-weight:500;margin-bottom:12px;color:var(--text)}
-
+.card-title{font-size:13px;font-weight:500;margin-bottom:12px}
 .table-wrap{overflow-x:auto;margin-bottom:24px}
 table{width:100%;border-collapse:collapse}
 th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-weight:500;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
@@ -79,58 +65,14 @@ tr:hover td{background:var(--bg2)}
 .badge.r{background:rgba(224,92,92,.15);color:var(--red)}
 .badge.y{background:rgba(212,168,67,.15);color:var(--yellow)}
 .badge.b{background:rgba(91,139,212,.15);color:var(--blue)}
-.badge.p{background:rgba(155,111,212,.15);color:var(--purple)}
 .badge.x{background:rgba(100,100,100,.12);color:var(--text2)}
 .file-link{font-size:11px;color:var(--accent);text-decoration:none;font-family:var(--mono)}
 .file-link:hover{text-decoration:underline}
 .loading{color:var(--text3);font-family:var(--mono);font-size:12px;padding:20px 0}
-
-/* PILLAR BARS */
-.pillar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.pillar-label{font-size:11px;color:var(--text2);min-width:130px;letter-spacing:.04em}
-.pillar-bar-wrap{flex:1;background:var(--bg3);height:6px;border-radius:0}
-.pillar-bar{height:6px;transition:width .5s ease}
-.pillar-val{font-family:var(--mono);font-size:11px;color:var(--text2);min-width:24px;text-align:right}
-
-/* PARTNER HEALTH */
-.health-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-@media(max-width:700px){.health-grid{grid-template-columns:1fr}}
-.health-card{background:var(--bg2);border:1px solid var(--border);padding:14px}
-.health-card-title{font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.health-dot{width:8px;height:8px;border-radius:50%}
-.health-item{font-size:12px;padding:5px 0;border-bottom:1px solid var(--border);color:var(--text2);cursor:pointer;display:flex;justify-content:space-between}
-.health-item:hover{color:var(--text)}
-.health-item:last-child{border-bottom:none}
-
-/* PARTNER DETAIL */
-.partner-detail{display:none;background:var(--bg2);border:1px solid var(--border);padding:20px;margin-bottom:20px}
-.partner-detail.open{display:block}
-.partner-detail-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
-.partner-detail-name{font-size:18px;font-weight:600}
-.back-btn{font-size:11px;color:var(--text2);cursor:pointer;font-family:var(--mono);margin-bottom:16px;display:inline-block}
-.back-btn:hover{color:var(--accent)}
-.score-big{font-size:48px;font-weight:600;font-family:var(--mono);color:var(--accent)}
-
-/* CALENDAR */
-.cal-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.cal-nav{background:none;border:1px solid var(--border2);color:var(--text2);padding:5px 12px;cursor:pointer;font-family:var(--mono);font-size:12px}
-.cal-nav:hover{border-color:var(--accent);color:var(--accent)}
-.cal-month-label{font-size:16px;font-weight:600;font-family:var(--mono)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
-.cal-day-name{background:var(--bg2);padding:6px;text-align:center;font-size:10px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase}
-.cal-day{background:var(--bg);padding:6px;min-height:72px}
-.cal-day.other-month{background:var(--bg2);opacity:.35}
-.cal-day.today .cal-date{color:var(--accent);font-weight:600}
-.cal-date{font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:3px}
-.cal-ev{font-size:10px;padding:2px 4px;margin-bottom:2px;border-left:2px solid;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cal-ev.conf{border-color:var(--blue);background:rgba(91,139,212,.12);color:#8ab0e8}
-.cal-ev.mou{border-color:var(--accent);background:rgba(200,169,110,.12);color:var(--accent)}
-.cal-ev.perf{border-color:var(--green);background:rgba(76,175,125,.12);color:var(--green)}
-.cal-ev.sch{border-color:var(--yellow);background:rgba(212,168,67,.12);color:var(--yellow)}
-.cal-ev.vis{border-color:var(--purple);background:rgba(155,111,212,.12);color:var(--purple)}
-
-/* FORM */
-.add-btn{background:none;border:1px solid var(--accent);color:var(--accent);padding:7px 16px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.08em;margin-bottom:20px}
+.filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.f-select,.f-input{background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:7px 12px;font-family:var(--font);font-size:13px;outline:none}
+.f-input{flex:1;min-width:160px}
+.add-btn{background:none;border:1px solid var(--accent);color:var(--accent);padding:7px 16px;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.08em}
 .add-btn:hover{background:var(--accent);color:#000}
 .form-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center}
 .form-overlay.open{display:flex}
@@ -147,23 +89,11 @@ tr:hover td{background:var(--bg2)}
 .form-submit:hover{background:#d4b87a}
 .form-cancel{flex:1;padding:10px;background:none;border:1px solid var(--border2);color:var(--text2);font-family:var(--font);font-size:13px;cursor:pointer}
 .form-cancel:hover{color:var(--text)}
-
-/* FILTERS */
-.filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.f-select,.f-input{background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:7px 12px;font-family:var(--font);font-size:13px;outline:none}
-.f-input{flex:1;min-width:160px}
-
-/* INSTITUTE TABS */
-.inst-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
-.inst-tab{padding:6px 14px;font-size:12px;border:1px solid var(--border2);color:var(--text2);cursor:pointer;font-family:var(--mono);transition:all .15s}
-.inst-tab:hover{border-color:var(--text2);color:var(--text)}
-.inst-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(200,169,110,.08)}
-
+.data-status{font-size:11px;font-family:var(--mono);color:var(--text3);padding:4px 0;margin-bottom:12px}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-tag">PGVIMIR / INTERNAL</div>
@@ -178,7 +108,6 @@ tr:hover td{background:var(--bg2)}
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <div class="sidebar">
     <div class="sidebar-logo">
@@ -207,7 +136,7 @@ tr:hover td{background:var(--bg2)}
 
       <!-- OVERVIEW -->
       <div class="panel active" id="panel-overview">
-        <div style="display:flex;gap:10px;margin-bottom:20px;align-items:center;flex-wrap:wrap">
+        <div class="filters">
           <select class="f-select" id="ov-fy-filter" onchange="renderOverview()" style="min-width:160px">
             <option value="">ทุกปีงบประมาณ</option>
           </select>
@@ -216,7 +145,7 @@ tr:hover td{background:var(--bg2)}
             <option value="International">International</option>
             <option value="Domestic">Domestic</option>
           </select>
-          <span style="font-size:11px;color:var(--text3);font-family:var(--mono)" id="ov-filter-label"></span>
+          <span class="data-status" id="ov-filter-label"></span>
         </div>
         <div class="metrics">
           <div class="metric"><div class="metric-val b" id="ov-mou">—</div><div class="metric-lbl">MOU Active</div></div>
@@ -229,28 +158,6 @@ tr:hover td{background:var(--bg2)}
         <div class="grid2">
           <div class="card"><div class="card-title">กิจกรรมที่กำลังจะมา</div><div id="ov-upcoming-list"><div class="loading">กำลังโหลด...</div></div></div>
           <div class="card"><div class="card-title">MOU ใกล้หมดอายุ</div><div id="ov-expiring-list"><div class="loading">กำลังโหลด...</div></div></div>
-        </div>
-      </div>
-
-      <!-- DASHBOARD removed - using link -->
-      <div class="panel" id="panel-dashboard"></div>
-
-      <!-- EACH INSTITUTE -->
-      <div class="panel" id="panel-institute">
-        <div class="filters">
-          <input class="f-input" id="inst-search" placeholder="ค้นหาสถาบัน..." oninput="renderInstitute()">
-          <select class="f-select" id="inst-filter" onchange="renderInstitute()">
-            <option value="">ทั้งหมด</option>
-            <option value="International">International</option>
-            <option value="National">National</option>
-          </select>
-        </div>
-        <div class="sec-title">เปรียบเทียบสถาบัน</div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>สถาบัน</th><th>ประเทศ</th><th>Inbound</th><th>Outbound</th><th>รวม</th><th>ประเภทกิจกรรม</th></tr></thead>
-            <tbody id="inst-table"></tbody>
-          </table>
         </div>
       </div>
 
@@ -281,47 +188,57 @@ tr:hover td{background:var(--bg2)}
             </select>
             <input class="f-input" id="cal-search" placeholder="ค้นหากิจกรรม..." oninput="renderCalList()" style="max-width:220px">
           </div>
-          <button class="add-btn" onclick="openForm()" style="margin-bottom:0">+ เพิ่มกิจกรรม</button>
+          <button class="add-btn" onclick="openForm()">+ เพิ่มกิจกรรม</button>
         </div>
+        <div class="data-status" id="cal-status"></div>
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>ชื่อกิจกรรม</th>
-                <th>สถาบัน / ประเทศ</th>
-                <th>ประเภท</th>
-                <th>วันเริ่ม</th>
-                <th>วันสิ้นสุด</th>
-                <th>ผู้รับผิดชอบ</th>
-                <th>หน่วยงาน</th>
-              </tr>
-            </thead>
+            <thead><tr><th>ชื่อกิจกรรม</th><th>สถาบัน / ประเทศ</th><th>ประเภท</th><th>วันเริ่ม</th><th>วันสิ้นสุด</th><th>ผู้รับผิดชอบ</th></tr></thead>
             <tbody id="cal-list"></tbody>
           </table>
         </div>
-        <div id="cal-loading" class="loading">กำลังโหลด...</div>
       </div>
 
-
+      <!-- EACH INSTITUTE -->
+      <div class="panel" id="panel-institute">
+        <div class="filters">
+          <input class="f-input" id="inst-search" placeholder="ค้นหาสถาบัน..." oninput="renderInstitute()">
+          <select class="f-select" id="inst-filter" onchange="renderInstitute()">
+            <option value="">ทั้งหมด</option>
+            <option value="International">International</option>
+            <option value="Domestic">Domestic</option>
+          </select>
+        </div>
+        <div class="data-status" id="inst-status"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>สถาบัน</th><th>ประเทศ</th><th>Inbound</th><th>Outbound</th><th>รวม</th><th>ประเภทกิจกรรม</th></tr></thead>
+            <tbody id="inst-table"></tbody>
+          </table>
+        </div>
+      </div>
 
     </div>
   </div>
 </div>
 
-<!-- ADD EVENT FORM -->
+<!-- FORM -->
 <div class="form-overlay" id="form-overlay">
   <div class="form-box">
     <div class="form-title">เพิ่มกิจกรรม</div>
     <div class="form-row"><label class="form-label">ชื่อกิจกรรม</label><input class="form-input" id="f-name" placeholder="เช่น SEADOM 2026"></div>
     <div class="form-row"><label class="form-label">สถาบัน</label><input class="form-input" id="f-inst" placeholder="เช่น YST, AEC"></div>
     <div class="form-row"><label class="form-label">ประเภท</label>
-      <select class="form-select" id="f-cat"><option value="Conference">Conference</option><option value="MOU">MOU</option><option value="Performing">Performing</option><option value="Scholarship">Scholarship</option><option value="Visiting">Visiting</option><option value="Other">Other</option></select>
+      <select class="form-select" id="f-cat">
+        <option>Conference</option><option>MOU</option><option>Performing</option>
+        <option>Scholarship</option><option>Visiting</option><option>Other</option>
+      </select>
     </div>
     <div class="form-row form-row2">
       <div><label class="form-label">วันเริ่ม</label><input class="form-input" id="f-start" type="date"></div>
       <div><label class="form-label">วันสิ้นสุด</label><input class="form-input" id="f-end" type="date"></div>
     </div>
-    <div class="form-row"><label class="form-label">ผู้รับผิดชอบ</label><input class="form-input" id="f-person" placeholder="ชื่อผู้รับผิดชอบ"></div>
+    <div class="form-row"><label class="form-label">ผู้รับผิดชอบ</label><input class="form-input" id="f-person"></div>
     <div class="form-btns">
       <button class="form-cancel" onclick="closeForm()">ยกเลิก</button>
       <button class="form-submit" onclick="addEvent()">บันทึก</button>
@@ -330,108 +247,101 @@ tr:hover td{background:var(--bg2)}
 </div>
 
 <script>
-// ===== AUTH =====
-const USERS = {'IR1':'admin123'};
+const USERS={'IR1':'admin123'};
 function doLogin(){
   const u=document.getElementById('uname').value.trim();
   const p=document.getElementById('upass').value;
-  if(USERS[u]&&USERS[u]===p){sessionStorage.setItem('pgvim_auth',u);document.getElementById('login-screen').style.display='none';document.getElementById('app').style.display='block';initApp();}
-  else{document.getElementById('login-err').style.display='block';}
+  if(USERS[u]&&USERS[u]===p){
+    sessionStorage.setItem('pgvim_auth',u);
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    initApp();
+  } else {
+    document.getElementById('login-err').style.display='block';
+  }
 }
 document.getElementById('upass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 function logout(){sessionStorage.removeItem('pgvim_auth');location.reload();}
-if(sessionStorage.getItem('pgvim_auth')){document.getElementById('login-screen').style.display='none';document.getElementById('app').style.display='block';}
+if(sessionStorage.getItem('pgvim_auth')){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+}
 
-// ===== CLOCK =====
 function updateClock(){document.getElementById('clock').textContent=new Date().toLocaleString('th-TH',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short',year:'numeric'});}
 setInterval(updateClock,1000);updateClock();
 
-// ===== NAV =====
-const navTitles={overview:'ภาพรวม',institute:'Each Institute',mou:'MOU',calendar:'Calendar'};
+const navTitles={overview:'ภาพรวม',mou:'MOU',calendar:'Calendar',institute:'Each Institute'};
 function nav(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('panel-'+id).classList.add('active');
   el.classList.add('active');
-  document.getElementById('topbar-title').textContent=navTitles[id];
+  document.getElementById('topbar-title').textContent=navTitles[id]||id;
 }
 
-// ===== CSV =====
-const _MOU='https://docs.google.com/spreadsheets/d/e/2PACX-1vQc5N_5tnBnYsXEyY6NRxNZYJJINVfoZp-VzCECkaQl9CPy-gRMoQYO6McIly6-l-OQCVKNCj_vXs0w/pub?gid=51578232&single=true&output=csv';
-const _CAL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQR4S2Jxta5T3opzmq5EHWysW6j9-lea2Fxd94AUaKdoNxIvuuQa7MNaMeUVydvR6Ep5pQavWBKFRjg/pub?gid=0&single=true&output=csv';
-const _PPL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRVWxk12K9-pbBURP7RKwmvxH0j4bY0LEbml4FMv3J0_H5Q5DfVelKg5n1wd_EdGx_Bp4mZwgWrdflk/pub?output=csv';
-const PROXY='https://api.allorigins.win/raw?url=';
-const CSV_MOU=PROXY+encodeURIComponent(_MOU);
-const CSV_CAL=PROXY+encodeURIComponent(_CAL);
-const CSV_PPL=PROXY+encodeURIComponent(_PPL);
 let mouData=[],calData=[],pplData=[],localEvents=[];
-function fetchCSV(url,cb){
-  fetch(url)
-    .then(r=>{
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      return r.text();
-    })
-    .then(text=>{
-      const result=Papa.parse(text,{header:true,skipEmptyLines:true});
-      cb(result.data);
-    })
-    .catch(err=>{
-      console.error('fetchCSV error:',err,url);
-      cb([]);
-    });
+
+// ดึง JSON จาก repo (ไม่มี CORS)
+async function loadJSON(path){
+  try{
+    const r=await fetch(path+'?t='+Date.now());
+    if(!r.ok)throw new Error(r.status);
+    return await r.json();
+  }catch(e){
+    console.warn('Cannot load '+path,e);
+    return null;
+  }
 }
 
-// ===== INIT =====
-function initApp(){
+async function initApp(){
   updateClock();
-  fetchCSV(CSV_MOU,d=>{mouData=d;processMOU();});
-  fetchCSV(CSV_CAL,d=>{calData=d;processCalendar();});
-  fetchCSV(CSV_PPL,d=>{pplData=d;processPeople();});
-  renderCalendar();
+  // โหลดพร้อมกันทุกไฟล์
+  const [mou,cal,ppl]=await Promise.all([
+    loadJSON('data/mou.json'),
+    loadJSON('data/calendar.json'),
+    loadJSON('data/people.json')
+  ]);
+
+  if(mou){mouData=mou;processMOU();}
+  else{
+    document.getElementById('mou-loading').textContent='ยังไม่มีข้อมูล — รอ GitHub Actions รันก่อนครับ';
+  }
+
+  if(cal){calData=cal;processCalendar();}
+  if(ppl){pplData=ppl;processPeople();}
 }
 
-// ===== HELPERS =====
-const PILLARS=['Student Exchange','Lecturer Exchange','Workshop & Training','Conference','Research & Publication','Curriculum'];
-const PILLAR_KEYS=['การแลกเปลี่ยนนักศึกษา','การแลกเปลี่ยนอาจารย์','อบรมเชิงปฏิบัติการ','เข้าร่วมประชุม','วิจัย','หลักสูตร'];
-const PILLAR_COLORS=['#d4a843','#d4a843','#5b8bd4','#888','#e05c5c','#4caf7d'];
-
-function getPillarIdx(activity){
-  const a=(activity||'').toLowerCase();
-  if(a.includes('นักศึกษา')||a.includes('student'))return 0;
-  if(a.includes('อาจารย์')||a.includes('lecturer')||a.includes('faculty'))return 1;
-  if(a.includes('อบรม')||a.includes('workshop')||a.includes('training')||a.includes('แสดง'))return 2;
-  if(a.includes('ประชุม')||a.includes('conference')||a.includes('symposium'))return 3;
-  if(a.includes('วิจัย')||a.includes('research'))return 4;
-  if(a.includes('หลักสูตร')||a.includes('curriculum'))return 5;
-  return 3;
-}
-
-function getHealth(total,inb,outb){
-  if(total>=5&&inb>0&&outb>0)return'good';
-  if(total>=2||(inb>0||outb>0))return'watch';
-  return'contact';
-}
-
-// ===== MOU =====
+// MOU
 function processMOU(){
   const today=new Date();
   const intl=[],natl=[],pending=[];
   let totalActive=0,expiring=0;
   const expiringList=[];
+
   mouData.forEach(row=>{
-    const name=row['Name']||'';const country=row['Country']||'';const type=row['Type']||'';
-    const status=row['Status']||'';const signDate=row['Sign date']||'';const expired=row['Expired']||'';const file=row['File']||'';
+    const name=row['Name']||'';
+    const country=row['Country']||'';
+    const type=row['Type']||'';
+    const status=row['Status']||'';
+    const signDate=row['Sign date']||'';
+    const expired=row['Expired']||'';
+    const file=row['File']||'';
     if(!name)return;
+
     const sLow=status.toLowerCase();
-    const isNew=sLow.includes('new');const isExpiredStatus=sLow.includes('expired');const isActive=sLow.includes('active');
     const allVals=Object.values(row).join(' ');
-    const subStatus=allVals.includes('In process')?'In process':allVals.includes('Waiting for renew')?'Waiting for renew':allVals.includes('Waiting for discussion')?'Waiting for discussion':'';
-    if(isNew){pending.push({name,country,type,status,subStatus});return;}
-    if(isExpiredStatus&&subStatus){pending.push({name,country,type,status:subStatus});return;}
+    const subStatus=allVals.includes('In process')?'In process':
+      allVals.includes('Waiting for renew')?'Waiting for renew':
+      allVals.includes('Waiting for discussion')?'Waiting for discussion':'';
+
+    if(sLow.includes('new')){pending.push({name,country,type,status,subStatus});return;}
+    if(sLow.includes('expired')&&subStatus){pending.push({name,country,type,status:subStatus});return;}
+
     let daysLeft=null;
     if(expired){const d=new Date(expired);if(!isNaN(d))daysLeft=Math.round((d-today)/86400000);}
-    if(isActive)totalActive++;
+    if(sLow.includes('active'))totalActive++;
     if(daysLeft!==null&&daysLeft<=90&&daysLeft>=0){expiring++;expiringList.push({name,country,daysLeft,expired});}
+
     const r2={name,country,type,status,signDate,expired,file,daysLeft};
     if(country&&country!=='Thailand')intl.push(r2);else natl.push(r2);
   });
@@ -439,6 +349,7 @@ function processMOU(){
   document.getElementById('ov-mou').textContent=totalActive;
   document.getElementById('ov-expiring').textContent=expiring;
 
+  // alerts
   const alertBox=document.getElementById('ov-alerts');
   alertBox.innerHTML='';
   expiringList.sort((a,b)=>a.daysLeft-b.daysLeft).slice(0,3).forEach(m=>{
@@ -446,12 +357,17 @@ function processMOU(){
     alertBox.innerHTML+=`<div class="alert ${c}"><span class="alert-tag">${c==='r'?'URGENT':'WARNING'}</span>MOU ${m.name} หมดอายุ ${m.expired} — เหลือ ${m.daysLeft} วัน</div>`;
   });
 
-  const expEl=document.getElementById('ov-expiring-list');
-  expEl.innerHTML=expiringList.length===0?'<div style="font-size:12px;color:var(--text3)">ไม่มี MOU ใกล้หมดอายุ</div>':
-    expiringList.sort((a,b)=>a.daysLeft-b.daysLeft).map(m=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px">${m.name}</span><span class="badge ${m.daysLeft<=30?'r':'y'}">${m.daysLeft}d</span></div>`).join('');
+  document.getElementById('ov-expiring-list').innerHTML=expiringList.length===0
+    ?'<div style="font-size:12px;color:var(--text3)">ไม่มี MOU ใกล้หมดอายุ</div>'
+    :expiringList.sort((a,b)=>a.daysLeft-b.daysLeft).map(m=>
+      `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:12px">${m.name}</span>
+        <span class="badge ${m.daysLeft<=30?'r':'y'}">${m.daysLeft}d</span>
+      </div>`).join('');
 
   document.getElementById('mou-loading').style.display='none';
   document.getElementById('mou-content').style.display='block';
+
   const mkRow=(r,showCountry)=>{
     const bc=r.status?.toLowerCase().includes('active')?'g':r.status?.toLowerCase().includes('expired')?'r':'x';
     const db=r.daysLeft!==null&&r.daysLeft<=90?`<span class="badge y" style="margin-left:5px">${r.daysLeft}d</span>`:'';
@@ -461,41 +377,141 @@ function processMOU(){
   };
   document.getElementById('mou-intl').innerHTML=intl.map(r=>mkRow(r,true)).join('')||'<tr><td colspan="7" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
   document.getElementById('mou-natl').innerHTML=natl.map(r=>mkRow(r,false)).join('')||'<tr><td colspan="6" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
-  document.getElementById('mou-pending').innerHTML=pending.map(r=>`<tr><td>${r.name}</td><td><span class="badge x">${r.type||'—'}</span></td><td><span class="badge b">${r.subStatus||r.status||'—'}</span></td></tr>`).join('')||'<tr><td colspan="3" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
+  document.getElementById('mou-pending').innerHTML=pending.map(r=>
+    `<tr><td>${r.name}</td><td><span class="badge x">${r.type||'—'}</span></td><td><span class="badge b">${r.subStatus||r.status||'—'}</span></td></tr>`
+  ).join('')||'<tr><td colspan="3" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>';
 }
 
-// ===== OVERVIEW FILTER =====
-function populateFYFilter(){
-  const years = [...new Set(pplData.map(r=>r['ปีงบประมาณ']||r['Fiscal Year']||'').filter(Boolean))].sort().reverse();
-  const sel = document.getElementById('ov-fy-filter');
-  years.forEach(y=>{
-    const opt=document.createElement('option');
-    opt.value=y; opt.textContent=`ปีงบ ${y}`;
-    sel.appendChild(opt);
+// Calendar
+function processCalendar(){
+  const all=[...calData,...localEvents];
+  const today=new Date();today.setHours(0,0,0,0);
+  const upcoming=all.filter(r=>{
+    const d=new Date(r['Start Date']||r.start||'');
+    return !isNaN(d)&&d>=today;
+  }).sort((a,b)=>new Date(a['Start Date']||a.start)-new Date(b['Start Date']||b.start)).slice(0,5);
+
+  document.getElementById('ov-upcoming').textContent=upcoming.length;
+  document.getElementById('ov-upcoming-list').innerHTML=upcoming.length===0
+    ?'<div style="font-size:12px;color:var(--text3)">ไม่มีกิจกรรม</div>'
+    :upcoming.map(r=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:12px">${r['Activity Name']||r.name||'—'}</span>
+        <span style="font-size:11px;color:var(--text2);font-family:var(--mono)">${r['Start Date']||r.start||''}</span>
+      </div>`).join('');
+
+  const el=document.getElementById('cal-status');
+  if(el)el.textContent=`${calData.length} รายการจาก Sheet + ${localEvents.length} รายการที่เพิ่มเอง`;
+  renderCalList();
+}
+
+function getCatBadge(cat){
+  const c=(cat||'').toLowerCase();
+  return c.includes('mou')?'y':c.includes('perf')?'g':c.includes('sch')?'y':c.includes('vis')?'x':'b';
+}
+
+function renderCalList(){
+  const q=(document.getElementById('cal-search')?.value||'').toLowerCase();
+  const fc=document.getElementById('cal-filter-cat')?.value||'';
+  const all=[...calData,...localEvents].filter(r=>{
+    const name=r['Activity Name']||r.name||'';
+    const cat=r['Category']||r.cat||'';
+    if(fc&&!cat.toLowerCase().includes(fc.toLowerCase()))return false;
+    if(q&&!name.toLowerCase().includes(q)&&!(r['Institute']||'').toLowerCase().includes(q))return false;
+    return name;
   });
+  document.getElementById('cal-list').innerHTML=all.map(r=>{
+    const isLocal=r.local?'<span style="font-size:9px;color:var(--accent);font-family:var(--mono);margin-left:4px">★NEW</span>':'';
+    return`<tr>
+      <td style="font-weight:500">${r['Activity Name']||r.name||'—'}${isLocal}</td>
+      <td style="font-size:12px;color:var(--text2)">${[r['Institute']||r.inst||'',r['Country']||r.country||''].filter(Boolean).join(' · ')||'—'}</td>
+      <td><span class="badge ${getCatBadge(r['Category']||r.cat)}">${r['Category']||r.cat||'—'}</span></td>
+      <td style="font-family:var(--mono);font-size:12px">${r['Start Date']||r.start||'—'}</td>
+      <td style="font-family:var(--mono);font-size:12px">${r['End Date']||r.end||'—'}</td>
+      <td style="font-size:12px;color:var(--text2)">${r['Responsible Person']||r.person||'—'}</td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="6" style="color:var(--text3);padding:16px">ไม่พบข้อมูล</td></tr>';
+}
+
+// People / Institute
+function processPeople(){
+  populateFYFilter();
+  renderOverview();
+  renderInstitute();
+  const el=document.getElementById('inst-status');
+  if(el)el.textContent=`${pplData.length} รายการ`;
+}
+
+function populateFYFilter(){
+  const years=[...new Set(pplData.map(r=>r['ปีงบประมาณ']||r['Fiscal Year']||'').filter(Boolean))].sort().reverse();
+  const sel=document.getElementById('ov-fy-filter');
+  sel.innerHTML='<option value="">ทุกปีงบประมาณ</option>';
+  years.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=`ปีงบ ${y}`;sel.appendChild(o);});
 }
 
 function renderOverview(){
-  const fy = document.getElementById('ov-fy-filter').value;
-  const intl = document.getElementById('ov-intl-filter').value;
-  
-  let filtered = pplData.filter(r=>r['ชื่อ']);
-  if(fy) filtered = filtered.filter(r=>(r['ปีงบประมาณ']||r['Fiscal Year']||'')==fy);
-  if(intl) filtered = filtered.filter(r=>(r['International/Domestic']||'')==intl);
-
-  const inb = filtered.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('เข้า')).length;
-  const outb = filtered.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('ออก')).length;
-
-  document.getElementById('ov-inbound').textContent = inb;
-  document.getElementById('ov-outbound').textContent = outb;
-
-  const labels = [];
-  if(fy) labels.push(`ปีงบ ${fy}`);
-  if(intl) labels.push(intl);
-  document.getElementById('ov-filter-label').textContent = labels.length ? `แสดง: ${labels.join(' · ')}` : '';
+  const fy=document.getElementById('ov-fy-filter').value;
+  const intl=document.getElementById('ov-intl-filter').value;
+  let f=pplData.filter(r=>r['ชื่อ']);
+  if(fy)f=f.filter(r=>(r['ปีงบประมาณ']||r['Fiscal Year']||'')==fy);
+  if(intl)f=f.filter(r=>(r['International/Domestic']||'')==intl);
+  document.getElementById('ov-inbound').textContent=f.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('เข้า')).length;
+  document.getElementById('ov-outbound').textContent=f.filter(r=>(r['ขาเข้า / ขาออก']||'').includes('ออก')).length;
+  const labels=[];
+  if(fy)labels.push(`ปีงบ ${fy}`);
+  if(intl)labels.push(intl);
+  document.getElementById('ov-filter-label').textContent=labels.length?`แสดง: ${labels.join(' · ')}`:
+    `ข้อมูลทั้งหมด ${pplData.length} รายการ`;
 }
 
-// ===== BOOT =====
+function renderInstitute(){
+  const q=(document.getElementById('inst-search')?.value||'').toLowerCase();
+  const f=document.getElementById('inst-filter')?.value||'';
+  const partners={};
+  pplData.filter(r=>r['ชื่อ']).forEach(r=>{
+    const inst=r['หน่วยงาน']||'Unknown';
+    const country=r['ประเทศ']||'';
+    const intlDom=r['International/Domestic']||'';
+    if(!partners[inst])partners[inst]={name:inst,country,intlDom,inb:0,outb:0,types:new Set()};
+    if((r['ขาเข้า / ขาออก']||'').includes('เข้า'))partners[inst].inb++;else partners[inst].outb++;
+    const act=r['ลักษณะกิจกรรมที่เข้าร่วม']||'';if(act)partners[inst].types.add(act);
+  });
+  let list=Object.values(partners).filter(p=>{
+    if(q&&!p.name.toLowerCase().includes(q)&&!p.country.toLowerCase().includes(q))return false;
+    if(f&&p.intlDom!==f)return false;
+    return true;
+  }).sort((a,b)=>(b.inb+b.outb)-(a.inb+a.outb));
+  document.getElementById('inst-table').innerHTML=list.map(p=>{
+    const total=p.inb+p.outb;
+    const types=[...p.types].slice(0,2).map(t=>`<span class="badge x" style="font-size:9px;margin-right:2px">${t.slice(0,14)}</span>`).join('');
+    return`<tr><td style="font-weight:500">${p.name}</td><td>${p.country||'—'}</td>
+      <td style="font-family:var(--mono);color:var(--blue)">${p.inb}</td>
+      <td style="font-family:var(--mono);color:var(--yellow)">${p.outb}</td>
+      <td style="font-family:var(--mono);font-weight:600">${total}</td>
+      <td>${types}</td></tr>`;
+  }).join('')||'<tr><td colspan="6" style="color:var(--text3)">ไม่พบข้อมูล</td></tr>';
+}
+
+// Add event
+function openForm(){document.getElementById('form-overlay').classList.add('open');}
+function closeForm(){document.getElementById('form-overlay').classList.remove('open');}
+function addEvent(){
+  const name=document.getElementById('f-name').value.trim();
+  const start=document.getElementById('f-start').value;
+  if(!name||!start){alert('กรุณาใส่ชื่อกิจกรรมและวันที่');return;}
+  localEvents.push({
+    'Activity Name':name,name,
+    'Institute':document.getElementById('f-inst').value.trim(),
+    'Category':document.getElementById('f-cat').value,
+    'Start Date':start,start,
+    'End Date':document.getElementById('f-end').value||start,
+    'Responsible Person':document.getElementById('f-person').value.trim(),
+    local:true
+  });
+  closeForm();
+  ['f-name','f-inst','f-start','f-end','f-person'].forEach(id=>document.getElementById(id).value='');
+  processCalendar();
+}
+
 if(sessionStorage.getItem('pgvim_auth'))initApp();
 </script>
 </body>
