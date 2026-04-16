@@ -173,7 +173,7 @@ tr:hover td{background:var(--bg2)}
     <div class="nav-item" onclick="nav('calendar',this)"><span class="nav-dot"></span>Calendar</div>
     <div class="nav-divider"></div>
     <div style="padding:10px 20px 4px;font-size:9px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;font-weight:500">ข้อมูล</div>
-    <a class="nav-item" href="https://docs.google.com/spreadsheets/d/1MgqEE1wJueLNQoLvyaQ8pUfpifUEJrwCGNeeidZmPxw/edit" target="_blank" rel="noopener noreferrer" style="text-decoration:none;font-size:12px"><span class="nav-dot" style="background:var(--text3)"></span>Database Sheet ↗</a>
+    <a class="nav-item" href="https://docs.google.com/spreadsheets/d/1MgqEE1wJueLNQoLvyaQ8pUfpifUEJrwCGNeeidZmPxw/edit" target="_blank" rel="noopener noreferrer" style="text-decoration:none;font-size:12px"><span class="nav-dot" style="background:var(--text3)"></span>Database (People) ↗</a>
     <a class="nav-item" href="https://docs.google.com/spreadsheets/d/1i5KALuOUIViBwQjC3F_znsIn8K-nfVGWmlQRA1U-U9Y/edit" target="_blank" rel="noopener noreferrer" style="text-decoration:none;font-size:12px"><span class="nav-dot" style="background:var(--text3)"></span>Calendar Sheet ↗</a>
     <a class="nav-item" href="https://docs.google.com/spreadsheets/d/1Po39BXJI5rtxarcVwb1w9Go9ZYBgWpNASI5ZFg10ZF4/edit" target="_blank" rel="noopener noreferrer" style="text-decoration:none;font-size:12px"><span class="nav-dot" style="background:var(--text3)"></span>MOU Sheet ↗</a>
     <div class="sidebar-footer">
@@ -219,16 +219,29 @@ tr:hover td{background:var(--bg2)}
       <div class="panel" id="panel-mou">
         <div id="mou-loading" class="loading">กำลังโหลด MOU...</div>
         <div id="mou-content" style="display:none">
-          <div class="sec-title">International</div>
-          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>ประเทศ</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-intl"></tbody></table></div>
-          <div class="sec-title">National — ระดับมหาวิทยาลัย</div>
-          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-uni"></tbody></table></div>
-          <div class="sec-title">National — ระดับโรงเรียน</div>
-          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-school"></tbody></table></div>
-          <div class="sec-title">National — ระดับหน่วยงาน</div>
-          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead><tbody id="mou-org"></tbody></table></div>
-          <div class="sec-title">Network</div>
-          <div class="table-wrap"><table><thead><tr><th>สถาบัน</th><th>ประเทศ</th><th>สถานะ</th></tr></thead><tbody id="mou-network"></tbody></table></div>
+          <div class="filters">
+            <select class="f-select" id="mou-f-section" onchange="renderMOU()">
+              <option value="">ทุกประเภท</option>
+              <option value="international">International</option>
+              <option value="uni">National — มหาวิทยาลัย</option>
+              <option value="school">National — โรงเรียน</option>
+              <option value="org">National — หน่วยงาน</option>
+              <option value="network">Network</option>
+            </select>
+            <select class="f-select" id="mou-f-status" onchange="renderMOU()">
+              <option value="">ทุกสถานะ</option>
+              <option value="active">Active</option>
+              <option value="expired">Expired</option>
+            </select>
+            <input class="f-input" id="mou-search" placeholder="ค้นหาสถาบัน..." oninput="renderMOU()">
+          </div>
+          <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:12px" id="mou-count"></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>สถาบัน</th><th>ประเทศ</th><th>ระดับ</th><th>สถานะ</th><th>ลงนาม</th><th>หมดอายุ</th><th>ไฟล์</th></tr></thead>
+              <tbody id="mou-table"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -424,9 +437,6 @@ function processMOU(){
         <span style="font-size:12px">${m.name}</span><span class="badge ${m.daysLeft<=30?'r':'y'}">${m.daysLeft}d</span>
       </div>`).join('');
 
-  document.getElementById('mou-loading').style.display='none';
-  document.getElementById('mou-content').style.display='block';
-
   const bc=s=>s?.toLowerCase().includes('active')?'g':s?.toLowerCase().includes('expired')?'r':'x';
   const db=r=>r.daysLeft!==null&&r.daysLeft<=90?`<span class="badge y" style="margin-left:5px">${r.daysLeft}d</span>`:'';
   const fl=r=>r.file?`<a class="file-link" href="${r.file}" target="_blank">PDF ↗</a>`:'—';
@@ -436,11 +446,51 @@ function processMOU(){
   const mkNet=r=>`<tr><td style="font-weight:500">${r.name}</td><td>${r.country||'—'}</td><td><span class="badge ${bc(r.status)}">${r.status||'—'}</span></td></tr>`;
   const empty=(n)=>`<tr><td colspan="${n}" style="color:var(--text3)">ไม่มีข้อมูล</td></tr>`;
 
-  document.getElementById('mou-intl').innerHTML=intl.map(mkIntl).join('')||empty(6);
-  document.getElementById('mou-uni').innerHTML=uni.map(mkNatl).join('')||empty(5);
-  document.getElementById('mou-school').innerHTML=school.map(mkNatl).join('')||empty(5);
-  document.getElementById('mou-org').innerHTML=org.map(mkNatl).join('')||empty(5);
-  document.getElementById('mou-network').innerHTML=network.map(mkNet).join('')||empty(3);
+  // store all with section label
+  window._mouAll = [
+    ...intl.map(r=>({...r,_sec:'international',_secLabel:'International'})),
+    ...uni.map(r=>({...r,_sec:'uni',_secLabel:'National — มหาวิทยาลัย'})),
+    ...school.map(r=>({...r,_sec:'school',_secLabel:'National — โรงเรียน'})),
+    ...org.map(r=>({...r,_sec:'org',_secLabel:'National — หน่วยงาน'})),
+    ...network.map(r=>({...r,_sec:'network',_secLabel:'Network'})),
+  ];
+
+  document.getElementById('mou-loading').style.display='none';
+  document.getElementById('mou-content').style.display='block';
+  renderMOU();
+}
+
+function renderMOU(){
+  if(!window._mouAll)return;
+  const sec=document.getElementById('mou-f-section').value;
+  const st=document.getElementById('mou-f-status').value;
+  const q=(document.getElementById('mou-search').value||'').toLowerCase();
+
+  let rows=window._mouAll.filter(r=>{
+    if(sec&&r._sec!==sec)return false;
+    if(st==='active'&&!r.status?.toLowerCase().includes('active'))return false;
+    if(st==='expired'&&!r.status?.toLowerCase().includes('expired'))return false;
+    if(q&&!r.name.toLowerCase().includes(q)&&!(r.country||'').toLowerCase().includes(q))return false;
+    return true;
+  });
+
+  document.getElementById('mou-count').textContent=`แสดง ${rows.length} รายการ`;
+
+  const bc=s=>s?.toLowerCase().includes('active')?'g':s?.toLowerCase().includes('expired')?'r':'x';
+  const db=r=>r.daysLeft!==null&&r.daysLeft<=90?`<span class="badge y" style="margin-left:5px">${r.daysLeft}d</span>`:'';
+  const fl=r=>r.file?`<a class="file-link" href="${r.file}" target="_blank">PDF ↗</a>`:'—';
+
+  document.getElementById('mou-table').innerHTML=rows.map(r=>
+    `<tr>
+      <td style="font-weight:500">${r.name}</td>
+      <td style="font-size:12px;color:var(--text2)">${r.country||'—'}</td>
+      <td><span class="badge x" style="font-size:9px">${r._secLabel}</span></td>
+      <td><span class="badge ${bc(r.status)}">${r.status||'—'}</span>${db(r)}</td>
+      <td style="font-size:11px">${r.signDate||'—'}</td>
+      <td style="font-size:11px">${r.expired||'—'}</td>
+      <td>${fl(r)}</td>
+    </tr>`
+  ).join('')||'<tr><td colspan="7" style="color:var(--text3);padding:16px">ไม่พบข้อมูล</td></tr>';
 }
 
 // PEOPLE & OVERVIEW
